@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { shareLink } from "@/lib/share";
-import { getStoreProducts, type Store } from "@/lib/stores";
+import { getStoreProducts, storeCover, type Store } from "@/lib/stores";
 import { StoreLogo } from "./StoreLogo";
 import { useStore } from "./StoreProvider";
 
@@ -17,7 +17,7 @@ export function ShopCard({ store }: { store: Store }) {
   const [copied, setCopied] = useState(false);
   const following = isFollowing(store.slug);
   const items = getStoreProducts(store);
-  const cover = items[0]?.image;
+  const cover = storeCover(store);
 
   async function share() {
     const text = `${store.name}: ${store.tagline}`;

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getStoreProducts, type Store } from "@/lib/stores";
+import { getStoreProducts, storeCover, type Store } from "@/lib/stores";
 
 export type Spotlight = { kind: "shop"; store: Store } | { kind: "sell" };
 
@@ -14,7 +14,7 @@ export function SpotlightCard({ spotlight }: { spotlight: Spotlight }) {
           eyebrow: "Featured shop",
           title: spotlight.store.name,
           text: `${spotlight.store.tagline}. ${getStoreProducts(spotlight.store).length} products, and its own app.`,
-          image: getStoreProducts(spotlight.store)[0]?.image,
+          image: storeCover(spotlight.store),
           href: `/${spotlight.store.slug}`,
           cta: "Visit shop",
         }
