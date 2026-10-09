@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { formatAmount, formatPrice, type Product } from "@/lib/products";
 import { shareLink } from "@/lib/share";
+import { useShareImage } from "@/lib/useShareImage";
 import { getStoreByName } from "@/lib/stores";
 import { ColorPicker } from "./ColorPicker";
 import { useStore } from "./StoreProvider";
@@ -30,21 +31,51 @@ export function PinCard({
 }) {
   const { addToCart, qtyInCart } = useStore();
   const [copied, setCopied] = useState(false);
+  const [tapAgain, setTapAgain] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const shareImage = useShareImage(`/og/${product.id}`, `${product.id}.jpg`);
   const [color, setColor] = useState(product.colors?.[0]?.name);
   const qty = qtyInCart(product.id, color);
   const href = `${basePath}/${product.id}`;
   const store = getStoreByName(product.seller);
 
+  // Load the share picture once the customer pauses on this card, so it's
+  // ready when they tap share (phones only allow sharing right after a tap).
+  const { prefetch } = shareImage;
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        clearTimeout(timer);
+        if (entry.isIntersecting) timer = setTimeout(prefetch, 900);
+      },
+      { threshold: 0.6 },
+    );
+    observer.observe(el);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [prefetch]);
+
   async function share() {
+    setTapAgain(false);
     const text = `${product.title} · ${formatPrice(product.price)}`;
-    if ((await shareLink({ title: product.title, text, path: href })) === "copied") {
+    const image = await shareImage.get();
+    const result = await shareLink({ title: product.title, text, path: href, image });
+    if (result === "copied") {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+    } else if (result === "blocked") {
+      // The picture took too long and the phone closed the tap's sharing window; it's ready now.
+      setTapAgain(true);
     }
   }
 
   return (
-    <div className="mb-2 break-inside-avoid rounded-[22px] bg-white p-1.5 shadow-[0_6px_20px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_10px_28px_rgba(15,23,42,0.12)] sm:mb-4 sm:rounded-[28px] sm:p-2">
+    <div ref={cardRef} className="mb-2 break-inside-avoid rounded-[22px] bg-white p-1.5 shadow-[0_6px_20px_rgba(15,23,42,0.06)] transition-shadow hover:shadow-[0_10px_28px_rgba(15,23,42,0.12)] sm:mb-4 sm:rounded-[28px] sm:p-2">
       <div className="px-2 pb-2.5 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
         <Link href={href} className="line-clamp-2 text-base font-semibold leading-tight sm:text-xl">
           {product.title}
@@ -77,8 +108,13 @@ export function PinCard({
 
         <button
           onClick={share}
-          aria-label={copied ? "Link copied" : `Share ${product.title}`}
-          className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full border border-white/50 bg-black/10 shadow-[0_4px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.45)] backdrop-blur-md backdrop-saturate-150 transition-colors hover:bg-white/25 active:scale-90 sm:h-10 sm:w-10"
+          onPointerDown={prefetch}
+          onPointerEnter={prefetch}
+          onFocus={prefetch}
+          aria-label={copied ? "Link copied" : tapAgain ? `Tap again to share ${product.title}` : `Share ${product.title}`}
+          className={`absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full border border-white/50 bg-black/10 shadow-[0_4px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.45)] backdrop-blur-md backdrop-saturate-150 transition-colors hover:bg-white/25 active:scale-90 sm:h-10 sm:w-10 ${
+            tapAgain ? "animate-pulse ring-2 ring-white" : ""
+          }`}
         >
           {/* Frosted glass: blurred, see-through, with a light edge; the faint dark tint keeps the white icon readable on pale photos. */}
           <svg

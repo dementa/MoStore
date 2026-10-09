@@ -2,7 +2,8 @@
  * Opens the phone's share sheet for a MoStore link, or copies the link where
  * there's no share sheet (most computers). With an image, phones that can
  * share files get the picture plus the link, ready for WhatsApp Status.
- * Resolves to what happened.
+ * Resolves to what happened; "blocked" means the phone refused because too
+ * much time passed since the tap, so a second tap will work.
  */
 export async function shareLink({
   title,
@@ -14,7 +15,7 @@ export async function shareLink({
   text?: string;
   path: string;
   image?: File | null;
-}): Promise<"shared" | "copied" | "failed"> {
+}): Promise<"shared" | "copied" | "cancelled" | "blocked" | "failed"> {
   const url = new URL(path, window.location.origin).href;
   if (image && navigator.canShare?.({ files: [image] })) {
     try {
@@ -22,7 +23,8 @@ export async function shareLink({
       await navigator.share({ files: [image], title, text: [text, url].filter(Boolean).join("\n") });
       return "shared";
     } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return "failed";
+      const outcome = shareError(err);
+      if (outcome !== "failed") return outcome;
       // Otherwise fall through and share the plain link.
     }
   }
@@ -30,8 +32,8 @@ export async function shareLink({
     try {
       await navigator.share({ title, text, url });
       return "shared";
-    } catch {
-      return "failed";
+    } catch (err) {
+      return shareError(err);
     }
   }
   try {
@@ -40,4 +42,10 @@ export async function shareLink({
   } catch {
     return "failed";
   }
+}
+
+function shareError(err: unknown) {
+  if (err instanceof DOMException && err.name === "AbortError") return "cancelled" as const;
+  if (err instanceof DOMException && err.name === "NotAllowedError") return "blocked" as const;
+  return "failed" as const;
 }
