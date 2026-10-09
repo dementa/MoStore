@@ -78,9 +78,14 @@ export function PinCard({
         <button
           onClick={share}
           aria-label={copied ? "Link copied" : `Share ${product.title}`}
-          className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full bg-white/90 shadow-sm active:scale-90 sm:h-10 sm:w-10"
+          className="absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full border border-white/50 bg-black/10 shadow-[0_4px_14px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,255,255,0.45)] backdrop-blur-md backdrop-saturate-150 transition-colors hover:bg-white/25 active:scale-90 sm:h-10 sm:w-10"
         >
-          <svg viewBox="0 0 24 24" className={`h-4 w-4 sm:h-5 sm:w-5 ${copied ? "fill-green-600" : "fill-black"}`} aria-hidden>
+          {/* Frosted glass: blurred, see-through, with a light edge; the faint dark tint keeps the white icon readable on pale photos. */}
+          <svg
+            viewBox="0 0 24 24"
+            className={`h-4 w-4 drop-shadow-[0_1px_1px_rgba(0,0,0,0.35)] sm:h-5 sm:w-5 ${copied ? "fill-green-300" : "fill-white"}`}
+            aria-hidden
+          >
             <path d={copied ? CHECK : SHARE} />
           </svg>
         </button>
