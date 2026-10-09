@@ -15,7 +15,7 @@ self.addEventListener("push", (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title || "MoStore", {
       body: data.body,
-      icon: "/icons/icon-192.png",
+      icon: data.icon || "/icons/icon-192.png",
       badge: "/icons/badge-96.png",
       image: data.image,
       tag: data.tag,

@@ -3,16 +3,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, type Product } from "@/lib/products";
+import { getStoreByName } from "@/lib/stores";
 import { useStore } from "./StoreProvider";
 
-export function PinCard({ product }: { product: Product }) {
+export function PinCard({
+  product,
+  basePath = "/product",
+  showSeller = true,
+}: {
+  product: Product;
+  /** Where product links point: "/product" in the marketplace, "/<store>/p" inside a store. */
+  basePath?: string;
+  showSeller?: boolean;
+}) {
   const { isSaved, toggleSave, addToCart } = useStore();
   const saved = isSaved(product.id);
+  const href = `${basePath}/${product.id}`;
+  const store = getStoreByName(product.seller);
 
   return (
     <div className="group mb-4 break-inside-avoid">
       <div className="relative overflow-hidden rounded-2xl bg-zinc-100">
-        <Link href={`/product/${product.id}`} aria-label={product.title}>
+        <Link href={href} aria-label={product.title}>
           <Image
             src={product.image}
             alt={product.title}
@@ -50,15 +62,25 @@ export function PinCard({ product }: { product: Product }) {
         </button>
       </div>
 
-      <Link href={`/product/${product.id}`} className="block px-1 pt-2">
-        <p className="line-clamp-2 text-sm font-semibold leading-snug">{product.title}</p>
-        <p className="mt-1 flex items-center gap-1.5 text-xs text-zinc-600">
-          <span className="grid h-5 w-5 place-items-center rounded-full bg-zinc-200 text-[10px] font-bold">
-            {product.seller[0]}
-          </span>
-          {product.seller}
-        </p>
-      </Link>
+      <div className="px-1 pt-2">
+        <Link href={href} className="line-clamp-2 text-sm font-semibold leading-snug">
+          {product.title}
+        </Link>
+        {showSeller && (
+          <Link
+            href={store ? `/${store.slug}` : href}
+            className="mt-1 flex w-fit items-center gap-1.5 text-xs text-zinc-600 hover:underline"
+          >
+            <span
+              className="grid h-5 w-5 place-items-center rounded-full text-[10px] font-bold text-white"
+              style={{ background: store?.color ?? "#71717a" }}
+            >
+              {product.seller[0]}
+            </span>
+            {product.seller}
+          </Link>
+        )}
+      </div>
     </div>
   );
 }

@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-};
+import { useInstall } from "@/lib/useInstall";
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 
@@ -16,11 +12,9 @@ function urlBase64ToUint8Array(base64: string) {
   return Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
 }
 
-export function AppMenu() {
+export function AppMenu({ appName = "MoStore", store }: { appName?: string; store?: string }) {
   const [open, setOpen] = useState(false);
-  const [installEvent, setInstallEvent] = useState<BeforeInstallPromptEvent | null>(null);
-  const [standalone, setStandalone] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const { installed, canInstall, isIOS, install } = useInstall();
   const [pushSupported, setPushSupported] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -28,8 +22,6 @@ export function AppMenu() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setStandalone(window.matchMedia("(display-mode: standalone)").matches);
-    setIsIOS(/iPad|iPhone|iPod/.test(navigator.userAgent));
     setPushSupported("serviceWorker" in navigator && "PushManager" in window && "Notification" in window);
 
     if ("serviceWorker" in navigator) {
@@ -39,21 +31,6 @@ export function AppMenu() {
         .then((sub) => setSubscribed(!!sub))
         .catch(() => {});
     }
-
-    const onPrompt = (e: Event) => {
-      e.preventDefault();
-      setInstallEvent(e as BeforeInstallPromptEvent);
-    };
-    const onInstalled = () => {
-      setInstallEvent(null);
-      setStandalone(true);
-    };
-    window.addEventListener("beforeinstallprompt", onPrompt);
-    window.addEventListener("appinstalled", onInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onPrompt);
-      window.removeEventListener("appinstalled", onInstalled);
-    };
   }, []);
 
   useEffect(() => {
@@ -65,18 +42,11 @@ export function AppMenu() {
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
-  async function install() {
-    if (!installEvent) return;
-    await installEvent.prompt();
-    await installEvent.userChoice;
-    setInstallEvent(null);
-  }
-
   async function sendTest(sub: PushSubscription) {
     const res = await fetch("/api/push/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(sub),
+      body: JSON.stringify({ subscription: sub, store }),
     });
     if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? "Could not send");
   }
@@ -131,7 +101,7 @@ export function AppMenu() {
     }
   }
 
-  const iosNeedsInstall = isIOS && !standalone;
+  const iosNeedsInstall = isIOS && !installed;
 
   return (
     <div ref={ref} className="relative">
@@ -151,17 +121,17 @@ export function AppMenu() {
 
       {open && (
         <div className="absolute right-0 top-14 z-40 w-80 max-w-[calc(100vw-2rem)] rounded-2xl bg-white p-4 shadow-[0_4px_24px_rgba(0,0,0,0.15)]">
-          {!standalone && (
+          {!installed && (
             <section className="mb-4 border-b border-zinc-100 pb-4">
               <p className="font-semibold">Get the app</p>
-              {installEvent ? (
+              {canInstall ? (
                 <>
-                  <p className="mt-1 text-sm text-zinc-600">Add MoStore to your home screen for one-tap shopping.</p>
+                  <p className="mt-1 text-sm text-zinc-600">Add {appName} to your home screen for one-tap shopping.</p>
                   <button
                     onClick={install}
                     className="mt-3 w-full rounded-full bg-brand py-3 text-sm font-semibold text-white hover:bg-brand-dark"
                   >
-                    Install MoStore
+                    Install {appName}
                   </button>
                 </>
               ) : isIOS ? (
@@ -182,12 +152,14 @@ export function AppMenu() {
             {!pushSupported || iosNeedsInstall ? (
               <p className="mt-1 text-sm text-zinc-600">
                 {iosNeedsInstall
-                  ? "On iPhone and iPad, add MoStore to your Home Screen first, then turn on notifications from the app."
+                  ? `On iPhone and iPad, add ${appName} to your Home Screen first, then turn on notifications from the app.`
                   : "This browser doesn't support push notifications."}
               </p>
             ) : subscribed ? (
               <>
-                <p className="mt-1 text-sm text-zinc-600">You&apos;ll hear about deals on things you save.</p>
+                <p className="mt-1 text-sm text-zinc-600">
+                  {store ? `You'll hear about new arrivals and deals from ${appName}.` : "You'll hear about deals on things you save."}
+                </p>
                 <div className="mt-3 flex gap-2">
                   <button
                     onClick={test}
@@ -207,7 +179,11 @@ export function AppMenu() {
               </>
             ) : (
               <>
-                <p className="mt-1 text-sm text-zinc-600">Get alerts for price drops and new drops from shops you love.</p>
+                <p className="mt-1 text-sm text-zinc-600">
+                  {store
+                    ? `Get alerts when ${appName} adds new arrivals or runs a deal.`
+                    : "Get alerts for price drops and new drops from shops you love."}
+                </p>
                 <button
                   onClick={enableNotifications}
                   disabled={busy}

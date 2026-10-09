@@ -1,8 +1,12 @@
 @import "tailwindcss";
 
-@theme inline {
+/* Not inline, so utilities read the variables and store pages can override them. */
+@theme {
   --color-brand: #e60023;
   --color-brand-dark: #ad081b;
+}
+
+@theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -17,4 +21,13 @@ body {
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }

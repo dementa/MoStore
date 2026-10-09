@@ -3,14 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useStore } from "@/components/StoreProvider";
+import type { Store } from "@/lib/stores";
 import { formatPrice, products } from "@/lib/products";
 
-export default function CartPage() {
+/** The whole cart in the marketplace, or only one store's items inside that store. */
+export function CartView({ store }: { store?: Store }) {
   const { cart, setQty } = useStore();
   const lines = cart.flatMap((l) => {
     const product = products.find((p) => p.id === l.id);
-    return product ? [{ ...l, product }] : [];
+    if (!product || (store && product.seller !== store.name)) return [];
+    return [{ ...l, product }];
   });
+  const productHref = (id: string) => (store ? `/${store.slug}/p/${id}` : `/product/${id}`);
   const subtotal = lines.reduce((sum, l) => sum + l.product.price * l.qty, 0);
 
   if (lines.length === 0) {
@@ -18,7 +22,7 @@ export default function CartPage() {
       <div className="py-24 text-center">
         <h1 className="text-3xl font-semibold">Your cart is empty</h1>
         <Link
-          href="/"
+          href={store ? `/${store.slug}` : "/"}
           className="mt-6 inline-block rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white hover:bg-brand-dark"
         >
           Find something you love
@@ -34,7 +38,7 @@ export default function CartPage() {
         <ul className="flex flex-col gap-4">
           {lines.map(({ id, qty, product }) => (
             <li key={id} className="flex gap-4">
-              <Link href={`/product/${id}`} className="shrink-0">
+              <Link href={productHref(id)} className="shrink-0">
                 <Image
                   src={product.image}
                   alt={product.title}
@@ -44,7 +48,7 @@ export default function CartPage() {
                 />
               </Link>
               <div className="flex flex-1 flex-col">
-                <Link href={`/product/${id}`} className="font-semibold hover:underline">
+                <Link href={productHref(id)} className="font-semibold hover:underline">
                   {product.title}
                 </Link>
                 <p className="text-sm text-zinc-600">{product.seller}</p>

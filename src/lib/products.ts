@@ -25,14 +25,14 @@ export type Category = (typeof categories)[number];
 // Placeholder catalog until a real backend exists. Heights vary on purpose so
 // the masonry feed gets its staggered look.
 const seed: Array<Omit<Product, "image" | "width"> & { imageSeed: string }> = [
-  { id: "linen-shirt", title: "Oversized linen shirt", description: "Breathable, relaxed fit linen for warm days.", price: 39, category: "Fashion", seller: "Ama Threads", height: 900, imageSeed: "linen" },
+  { id: "linen-shirt", title: "Oversized linen shirt", description: "Breathable, relaxed fit linen for warm days.", price: 39, category: "Fashion", seller: "Goba Collections", height: 900, imageSeed: "linen" },
   { id: "ceramic-vase", title: "Hand-thrown ceramic vase", description: "Speckled glaze, each one slightly different.", price: 54, category: "Home", seller: "Clay & Co", height: 720, imageSeed: "vase" },
   { id: "shea-butter", title: "Whipped shea butter", description: "Raw shea whipped with coconut oil and vanilla.", price: 18, category: "Beauty", seller: "Glow Naturals", height: 600, imageSeed: "shea" },
   { id: "wireless-earbuds", title: "Wireless earbuds", description: "30-hour battery, noise isolation, pocket case.", price: 79, category: "Tech", seller: "Volt Shop", height: 520, imageSeed: "earbuds" },
   { id: "abstract-print", title: "Abstract sunset print", description: "Giclée print on archival paper, A3.", price: 32, category: "Art", seller: "Studio Nkem", height: 840, imageSeed: "sunsetart" },
   { id: "spice-set", title: "Jollof spice blend set", description: "Three blends, small-batch, no fillers.", price: 22, category: "Food", seller: "Pepper Pot", height: 640, imageSeed: "spices" },
   { id: "canvas-backpack", title: "Waxed canvas backpack", description: "Water resistant, leather straps, 20L.", price: 95, category: "Outdoors", seller: "Trail Goods", height: 780, imageSeed: "backpack" },
-  { id: "gold-hoops", title: "Chunky gold hoops", description: "18k gold plated, hypoallergenic posts.", price: 28, category: "Fashion", seller: "Ama Threads", height: 560, imageSeed: "hoops" },
+  { id: "gold-hoops", title: "Chunky gold hoops", description: "18k gold plated, hypoallergenic posts.", price: 28, category: "Fashion", seller: "Goba Collections", height: 560, imageSeed: "hoops" },
   { id: "rattan-lamp", title: "Rattan pendant lamp", description: "Woven shade that throws soft patterned light.", price: 68, category: "Home", seller: "Nest Living", height: 960, imageSeed: "lamp" },
   { id: "face-oil", title: "Rosehip face oil", description: "Cold-pressed, for glow and even tone.", price: 26, category: "Beauty", seller: "Glow Naturals", height: 700, imageSeed: "faceoil" },
   { id: "mech-keyboard", title: "Compact mechanical keyboard", description: "75% layout, hot-swap switches, RGB.", price: 119, category: "Tech", seller: "Volt Shop", height: 480, imageSeed: "keyboard" },
@@ -48,6 +48,9 @@ const seed: Array<Omit<Product, "image" | "width"> & { imageSeed: string }> = [
   { id: "honey-jar", title: "Raw forest honey", description: "Unfiltered honey from local beekeepers.", price: 14, category: "Food", seller: "Pepper Pot", height: 700, imageSeed: "honey" },
   { id: "pottery-print", title: "Market day photo print", description: "Signed photographic print, 40×50cm.", price: 60, category: "Art", seller: "Retro Lens", height: 900, imageSeed: "market" },
   { id: "water-bottle", title: "Insulated water bottle", description: "Keeps cold 24h, hot 12h. 750ml.", price: 25, category: "Outdoors", seller: "Trail Goods", height: 600, imageSeed: "bottle" },
+  { id: "wrap-dress", title: "Ankara print wrap dress", description: "Bold wax print cotton, ties at the waist.", price: 72, category: "Fashion", seller: "Goba Collections", height: 920, imageSeed: "wrapdress" },
+  { id: "leather-sandals", title: "Hand-stitched leather sandals", description: "Full-grain leather that softens with wear.", price: 49, category: "Fashion", seller: "Goba Collections", height: 640, imageSeed: "sandals" },
+  { id: "bead-necklace", title: "Glass bead necklace", description: "Recycled glass beads, strung by hand.", price: 24, category: "Fashion", seller: "Goba Collections", height: 780, imageSeed: "beads" },
   { id: "smart-lamp", title: "Smart desk lamp", description: "Adjustable warmth, USB-C charging base.", price: 64, category: "Tech", seller: "Volt Shop", height: 760, imageSeed: "desklamp" },
 ];
 

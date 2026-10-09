@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next";
 
-export default function manifest(): MetadataRoute.Manifest {
-  return {
+// MoStore's own manifest. Served as a route (not the manifest.ts convention) so
+// store pages can point at their own manifest instead.
+export const dynamic = "force-static";
+
+export function GET() {
+  const manifest: MetadataRoute.Manifest = {
     name: "MoStore",
     short_name: "MoStore",
     description: "E-commerce for every one. Discover, save and shop.",
@@ -22,4 +26,5 @@ export default function manifest(): MetadataRoute.Manifest {
       { name: "Cart", url: "/cart", icons: [{ src: "/icons/icon-192.png", sizes: "192x192" }] },
     ],
   };
+  return Response.json(manifest, { headers: { "Content-Type": "application/manifest+json" } });
 }
