@@ -1,14 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { products } from "@/lib/products";
 import type { Store } from "@/lib/stores";
 import { AppMenu } from "./AppMenu";
+import { BackButton } from "./BackButton";
 import { StoreLogo } from "./StoreLogo";
 import { useStore } from "./StoreProvider";
 
 export function StoreHeader({ store }: { store: Store }) {
   const { cart } = useStore();
+  const home = `/${store.slug}`;
+  const pathname = usePathname();
   const count = cart.reduce((n, l) => {
     const p = products.find((x) => x.id === l.id);
     return p?.seller === store.name ? n + l.qty : n;
@@ -16,6 +20,7 @@ export function StoreHeader({ store }: { store: Store }) {
 
   return (
     <header className="sticky top-0 z-30 flex items-center gap-2 bg-canvas px-4 py-3">
+      {pathname !== home && <BackButton fallback={home} />}
       <Link href={`/${store.slug}`} className="flex min-w-0 flex-1 items-center gap-3 rounded-full py-1 pr-3">
         <StoreLogo store={store} size={40} />
         <span className="truncate text-lg font-semibold">{store.name}</span>

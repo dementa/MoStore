@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { AppMenu } from "./AppMenu";
+import { BackButton } from "./BackButton";
 import { useStore } from "./StoreProvider";
 
 export function Header() {
@@ -32,6 +33,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-30 flex items-center gap-2 bg-canvas px-4 py-3">
+      {pathname !== "/" && <BackButton fallback="/" />}
       <Link
         href="/"
         aria-label="MoStore home"
