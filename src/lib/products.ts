@@ -78,3 +78,7 @@ export function filterProducts(query?: string, category?: string) {
 export function formatPrice(n: number) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(n);
 }
+
+// Shown under "Popular on MoStore" on the search screen. Replace with real
+// search counts once there's traffic.
+export const popularSearches = ["Ankara", "Gold", "Leather", "Linen", "Ceramic", "Lamp", "Coffee", "Print"];

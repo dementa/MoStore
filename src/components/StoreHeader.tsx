@@ -24,7 +24,7 @@ export function StoreHeader({ store }: { store: Store }) {
       <Link
         href={`/${store.slug}/cart`}
         aria-label={`Cart (${count})`}
-        className="relative grid h-12 w-12 shrink-0 place-items-center rounded-full hover:bg-zinc-100"
+        className="relative hidden h-12 w-12 shrink-0 place-items-center rounded-full hover:bg-zinc-100 sm:grid"
       >
         <svg viewBox="0 0 24 24" className="h-6 w-6 fill-zinc-700" aria-hidden>
           <path d="M7 4V3a5 5 0 0 1 10 0v1h3a1 1 0 0 1 1 1.1l-1.5 15A2 2 0 0 1 17.5 22h-11a2 2 0 0 1-2-1.9L3 5.1A1 1 0 0 1 4 4h3Zm2 0h6V3a3 3 0 0 0-6 0v1Z" />

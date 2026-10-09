@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
+import { BottomNav } from "@/components/BottomNav";
 import { StoreHeader } from "@/components/StoreHeader";
 import { StorePrompts } from "@/components/StorePrompts";
 import { getStore, stores } from "@/lib/stores";
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateViewport({ params }: Props): Promise<Viewport> {
-  return { themeColor: getStore((await params).store)?.color ?? "#ffffff" };
+  return { themeColor: getStore((await params).store)?.color ?? "#ffffff", viewportFit: "cover" };
 }
 
 export default async function StoreLayout({ children, params }: Props & { children: React.ReactNode }) {
@@ -44,7 +45,8 @@ export default async function StoreLayout({ children, params }: Props & { childr
   return (
     <div style={brand}>
       <StoreHeader store={store} />
-      <main className="px-4 pb-16 pt-2">{children}</main>
+      <main className="px-4 pb-28 pt-2 sm:pb-16">{children}</main>
+      <BottomNav store={store} />
       <StorePrompts store={store} />
     </div>
   );

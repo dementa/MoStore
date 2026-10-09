@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { BottomNav } from "@/components/BottomNav";
 import { Header } from "@/components/Header";
 
 export default function MarketLayout({ children }: { children: React.ReactNode }) {
@@ -7,7 +8,8 @@ export default function MarketLayout({ children }: { children: React.ReactNode }
       <Suspense>
         <Header />
       </Suspense>
-      <main className="px-4 pb-16 pt-2">{children}</main>
+      <main className="px-4 pb-28 pt-2 sm:pb-16">{children}</main>
+      <BottomNav />
     </>
   );
 }

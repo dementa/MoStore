@@ -24,6 +24,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
+  // Lets the bottom bar sit clear of the iPhone home indicator.
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

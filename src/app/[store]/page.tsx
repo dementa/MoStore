@@ -1,14 +1,25 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CategoryChips } from "@/components/CategoryChips";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { ShareButton } from "@/components/ShareButton";
 import { StoreLogo } from "@/components/StoreLogo";
+import { categories, filterProducts } from "@/lib/products";
 import { getStore, getStoreProducts } from "@/lib/stores";
 
-export default async function StorePage({ params }: { params: Promise<{ store: string }> }) {
+export default async function StorePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ store: string }>;
+  searchParams: Promise<{ category?: string }>;
+}) {
   const store = getStore((await params).store);
   if (!store) notFound();
+  const { category } = await searchParams;
   const items = getStoreProducts(store);
+  const shown = category ? filterProducts(undefined, category).filter((p) => items.includes(p)) : items;
+  const storeCategories = categories.filter((c) => items.some((p) => p.category === c));
 
   return (
     <>
@@ -24,7 +35,10 @@ export default async function StorePage({ params }: { params: Promise<{ store: s
         </div>
       </section>
 
-      <MasonryGrid products={items} basePath={`/${store.slug}/p`} showSeller={false} />
+      {storeCategories.length > 1 && (
+        <CategoryChips base={`/${store.slug}`} categories={storeCategories} active={category} />
+      )}
+      <MasonryGrid products={shown} basePath={`/${store.slug}/p`} showSeller={false} />
 
       <footer className="mt-16 text-center text-xs text-zinc-500">
         Powered by{" "}

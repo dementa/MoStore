@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Store } from "@/lib/stores";
 import { useInstall } from "@/lib/useInstall";
 import { usePush } from "@/lib/usePush";
+import { BottomSheet } from "./BottomSheet";
 import { StoreLogo } from "./StoreLogo";
 
 const SHOW_AFTER_MS = 1500;
@@ -77,107 +78,93 @@ export function StorePrompts({ store }: { store: Store }) {
     }
   }
 
-  useEffect(() => {
-    if (!step) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && dismiss();
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  });
-
   if (!step) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40" onClick={dismiss}>
-      <div
-        key={step}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="prompt-title"
-        onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-md animate-[slide-up_0.3s_ease-out] rounded-t-3xl bg-white px-6 pt-3 pb-[calc(1.5rem+env(safe-area-inset-bottom))] shadow-2xl sm:mb-6 sm:rounded-3xl"
-      >
-        <div className="mx-auto mb-5 h-1.5 w-10 rounded-full bg-zinc-200" />
-
-        {step === "install" ? (
-          <>
-            <div className="flex items-center gap-4">
-              <StoreLogo store={store} size={64} />
-              <div>
-                <h2 id="prompt-title" className="text-lg font-semibold">
-                  Get the {store.name} app
-                </h2>
-                <p className="text-sm text-zinc-600">
-                  Shop faster and hear about new arrivals first. No app store needed.
-                </p>
-              </div>
+    <BottomSheet key={step} onClose={dismiss} labelledBy="prompt-title">
+      {step === "install" ? (
+        <>
+          <div className="flex items-center gap-4">
+            <StoreLogo store={store} size={64} />
+            <div>
+              <h2 id="prompt-title" className="text-lg font-semibold">
+                Get the {store.name} app
+              </h2>
+              <p className="text-sm text-zinc-600">
+                Shop faster and hear about new arrivals first. No app store needed.
+              </p>
             </div>
+          </div>
 
-            {canInstall ? (
-              <button
-                onClick={onInstall}
-                className="mt-6 w-full rounded-full bg-brand py-3.5 font-semibold text-white hover:bg-brand-dark"
-              >
-                Install
-              </button>
-            ) : (
-              <ol className="mt-6 flex flex-col gap-3 rounded-2xl bg-zinc-100 p-4 text-sm">
-                <li className="flex items-center gap-3">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white font-semibold">1</span>
-                  <span>
-                    Tap the <strong>Share</strong> button{" "}
-                    <svg viewBox="0 0 24 24" className="inline h-5 w-5 fill-sky-600 align-text-bottom" aria-label="Share icon">
-                      <path d="M12 2.6 16.7 7.3l-1.4 1.4L13 6.4V15h-2V6.4L8.7 8.7 7.3 7.3 12 2.6ZM5 10h3v2H6v8h12v-8h-2v-2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1Z" />
-                    </svg>{" "}
-                    in Safari&apos;s toolbar
-                  </span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white font-semibold">2</span>
-                  <span>
-                    Choose <strong>Add to Home Screen</strong>
-                  </span>
-                </li>
-              </ol>
-            )}
-          </>
-        ) : (
-          <>
-            <div className="flex items-center gap-4">
-              <div className="relative shrink-0">
-                <StoreLogo store={store} size={64} />
-                <span className="absolute -right-1 -top-1 grid h-7 w-7 place-items-center rounded-full bg-white shadow">
-                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-brand" aria-hidden>
-                    <path d="M12 2a7 7 0 0 1 7 7v4.6l1.7 2.9A1 1 0 0 1 19.8 18H4.2a1 1 0 0 1-.9-1.5L5 13.6V9a7 7 0 0 1 7-7Zm-3 17h6a3 3 0 0 1-6 0Z" />
-                  </svg>
-                </span>
-              </div>
-              <div>
-                <h2 id="prompt-title" className="text-lg font-semibold">
-                  Turn on notifications?
-                </h2>
-                <p className="text-sm text-zinc-600">
-                  Be first to know when {store.name} adds new arrivals or runs a deal.
-                </p>
-              </div>
-            </div>
+          {canInstall ? (
             <button
-              onClick={onEnable}
-              disabled={busy}
-              className="mt-6 w-full rounded-full bg-brand py-3.5 font-semibold text-white hover:bg-brand-dark disabled:opacity-60"
+              onClick={onInstall}
+              className="mt-6 w-full rounded-full bg-brand py-3.5 font-semibold text-white hover:bg-brand-dark"
             >
-              {busy ? "Turning on…" : "Turn on"}
+              Install
             </button>
-            {message && <p className="mt-3 text-center text-sm text-zinc-700">{message}</p>}
-          </>
-        )}
+          ) : (
+            <ol className="mt-6 flex flex-col gap-3 rounded-2xl bg-zinc-100 p-4 text-sm">
+              <li className="flex items-center gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white font-semibold">1</span>
+                <span>
+                  Tap the <strong>Share</strong> button{" "}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="inline h-5 w-5 fill-sky-600 align-text-bottom"
+                    aria-label="Share icon"
+                  >
+                    <path d="M12 2.6 16.7 7.3l-1.4 1.4L13 6.4V15h-2V6.4L8.7 8.7 7.3 7.3 12 2.6ZM5 10h3v2H6v8h12v-8h-2v-2h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V11a1 1 0 0 1 1-1Z" />
+                  </svg>{" "}
+                  in Safari&apos;s toolbar
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white font-semibold">2</span>
+                <span>
+                  Choose <strong>Add to Home Screen</strong>
+                </span>
+              </li>
+            </ol>
+          )}
+        </>
+      ) : (
+        <>
+          <div className="flex items-center gap-4">
+            <div className="relative shrink-0">
+              <StoreLogo store={store} size={64} />
+              <span className="absolute -right-1 -top-1 grid h-7 w-7 place-items-center rounded-full bg-white shadow">
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-brand" aria-hidden>
+                  <path d="M12 2a7 7 0 0 1 7 7v4.6l1.7 2.9A1 1 0 0 1 19.8 18H4.2a1 1 0 0 1-.9-1.5L5 13.6V9a7 7 0 0 1 7-7Zm-3 17h6a3 3 0 0 1-6 0Z" />
+                </svg>
+              </span>
+            </div>
+            <div>
+              <h2 id="prompt-title" className="text-lg font-semibold">
+                Turn on notifications?
+              </h2>
+              <p className="text-sm text-zinc-600">
+                Be first to know when {store.name} adds new arrivals or runs a deal.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onEnable}
+            disabled={busy}
+            className="mt-6 w-full rounded-full bg-brand py-3.5 font-semibold text-white hover:bg-brand-dark disabled:opacity-60"
+          >
+            {busy ? "Turning on…" : "Turn on"}
+          </button>
+          {message && <p className="mt-3 text-center text-sm text-zinc-700">{message}</p>}
+        </>
+      )}
 
-        <button
-          onClick={dismiss}
-          className="mt-3 w-full rounded-full py-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
-        >
-          Not now
-        </button>
-      </div>
-    </div>
+      <button
+        onClick={dismiss}
+        className="mt-3 w-full rounded-full py-3 text-sm font-semibold text-zinc-600 hover:bg-zinc-100"
+      >
+        Not now
+      </button>
+    </BottomSheet>
   );
 }
