@@ -16,6 +16,7 @@ export type Product = {
 
 export const categories = [
   "Fashion",
+  "Shoes",
   "Home",
   "Beauty",
   "Tech",
@@ -34,28 +35,35 @@ type SeedItem = Omit<Product, "image" | "width"> & ({ imageSeed: string } | { im
 const seed: SeedItem[] = [
   { id: "blush-pink-mini-tote", title: "Blush Pink Mini Tote", description: "Smooth leather with rolled handles and gold-tone hardware. Fits your phone, wallet and keys.", price: 68, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/blush-pink-mini-tote.jpg", width: 1200, height: 1200 },
   { id: "ceramic-vase", title: "Hand-thrown ceramic vase", description: "Speckled glaze, each one slightly different.", price: 54, category: "Home", seller: "Clay & Co", height: 720, imageSeed: "vase" },
+  { id: "black-chelsea-boots", title: "Black Leather Chelsea Boots", description: "Smooth black leather with elastic sides and a pull tab. Slips on, dresses up or down.", price: 110, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/black-chelsea-boots.jpg", width: 556, height: 695 },
   { id: "shea-butter", title: "Whipped shea butter", description: "Raw shea whipped with coconut oil and vanilla.", price: 18, category: "Beauty", seller: "Glow Naturals", height: 600, imageSeed: "shea" },
   { id: "tangerine-top-handle-bag", title: "Tangerine Top-Handle Bag", description: "Glossy orange leather with a single top handle and a gold turn-lock flap.", price: 72, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/tangerine-top-handle-bag.jpg", width: 1200, height: 1200 },
   { id: "wireless-earbuds", title: "Wireless earbuds", description: "30-hour battery, noise isolation, pocket case.", price: 79, category: "Tech", seller: "Volt Shop", height: 520, imageSeed: "earbuds" },
+  { id: "burnished-brown-chelsea-boots", title: "Burnished Brown Chelsea Boots", description: "Hand-burnished brown leather on a chunky rubber sole that grips in the rain.", price: 115, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/burnished-brown-chelsea-boots.jpg", width: 736, height: 1104 },
   { id: "abstract-print", title: "Abstract sunset print", description: "Giclée print on archival paper, A3.", price: 32, category: "Art", seller: "Studio Nkem", height: 840, imageSeed: "sunsetart" },
   { id: "cobalt-crossbody-satchel", title: "Cobalt Blue Satchel", description: "Zip-top satchel in bold cobalt leather. Carry it by the handles or with the detachable shoulder strap.", price: 78, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/cobalt-crossbody-satchel.jpg", width: 1200, height: 1200 },
   { id: "spice-set", title: "Jollof spice blend set", description: "Three blends, small-batch, no fillers.", price: 22, category: "Food", seller: "Pepper Pot", height: 640, imageSeed: "spices" },
+  { id: "black-wingtip-lug-derby", title: "Black Wingtip Derbies, Lug Sole", description: "Classic brogue detailing on a thick lug sole. Smart enough for the office, tough enough for the street.", price: 105, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/black-wingtip-lug-derby.jpg", width: 744, height: 970 },
   { id: "taupe-scarf-tote", title: "Taupe Tote with Silk Scarf", description: "Roomy pebbled-leather tote with a printed silk scarf tied on the handle. Fits a laptop.", price: 82, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/taupe-scarf-tote.jpg", width: 1000, height: 1500 },
   { id: "canvas-backpack", title: "Waxed canvas backpack", description: "Water resistant, leather straps, 20L.", price: 95, category: "Outdoors", seller: "Trail Goods", height: 780, imageSeed: "backpack" },
   { id: "rattan-lamp", title: "Rattan pendant lamp", description: "Woven shade that throws soft patterned light.", price: 68, category: "Home", seller: "Nest Living", height: 960, imageSeed: "lamp" },
+  { id: "oxblood-chelsea-boots", title: "Oxblood Chelsea Boots", description: "Deep oxblood leather with a slim profile and a stacked heel.", price: 120, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/oxblood-chelsea-boots.jpg", width: 700, height: 933 },
   { id: "face-oil", title: "Rosehip face oil", description: "Cold-pressed, for glow and even tone.", price: 26, category: "Beauty", seller: "Glow Naturals", height: 700, imageSeed: "faceoil" },
   { id: "mech-keyboard", title: "Compact mechanical keyboard", description: "75% layout, hot-swap switches, RGB.", price: 119, category: "Tech", seller: "Volt Shop", height: 480, imageSeed: "keyboard" },
   { id: "olive-work-tote", title: "Olive Leather Work Tote", description: "Structured olive leather tote, big enough for a laptop and everything else.", price: 88, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/olive-work-tote.jpg", width: 704, height: 1012 },
   { id: "kente-tote", title: "Kente pattern tote", description: "Hand-woven panel on sturdy cotton.", price: 35, category: "Fashion", seller: "Weave Story", height: 820, imageSeed: "tote" },
+  { id: "black-full-brogue-oxfords", title: "Black Full Brogue Oxfords", description: "High-shine black leather Oxfords with full wingtip broguing. Made for weddings and big days.", price: 125, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/black-full-brogue-oxfords.jpg", width: 1200, height: 1200 },
   { id: "ivory-charm-tote", title: "Ivory Tote with Gold Charm", description: "Structured ivory leather tote with a gold chain charm. Dressy enough for evenings.", price: 75, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/ivory-charm-tote.jpg", width: 688, height: 1024 },
   { id: "plant-stand", title: "Mid-century plant stand", description: "Solid wood, fits pots up to 25cm.", price: 45, category: "Home", seller: "Nest Living", height: 880, imageSeed: "plants" },
   { id: "film-camera", title: "Refurbished film camera", description: "35mm point-and-shoot, tested and cleaned.", price: 140, category: "Tech", seller: "Retro Lens", height: 620, imageSeed: "camera" },
   { id: "moss-suede-mini-tote", title: "Moss Suede Mini Tote", description: "Soft moss-green suede with winged sides and a gold buckle strap.", price: 70, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/moss-suede-mini-tote.jpg", width: 1024, height: 1536 },
   { id: "line-drawing", title: "Minimal line drawing", description: "Framed ink drawing, 30×40cm.", price: 48, category: "Art", seller: "Studio Nkem", height: 740, imageSeed: "lineart" },
+  { id: "tan-wingtip-brogues", title: "Tan Wingtip Brogues", description: "Hand-finished tan leather with a burnished toe and classic wingtip broguing.", price: 100, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/tan-wingtip-brogues.jpg", width: 564, height: 870 },
   { id: "coffee-beans", title: "Single-origin coffee beans", description: "Medium roast, notes of cocoa and citrus.", price: 16, category: "Food", seller: "Daybreak Roasters", height: 560, imageSeed: "coffee" },
   { id: "hammock", title: "Camping hammock", description: "Parachute nylon with tree straps, 300kg rated.", price: 42, category: "Outdoors", seller: "Trail Goods", height: 680, imageSeed: "hammock" },
   { id: "saddle-top-handle-bag", title: "Saddle Top-Handle Bag", description: "Curved saddle shape with a gold clasp. Comes in red or black.", price: 66, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/saddle-top-handle-bag.jpg", width: 1080, height: 1080, colors: [{ name: "Red", hex: "#9b1c1c" }, { name: "Black", hex: "#171717" }] },
   { id: "silk-scarf", title: "Printed silk scarf", description: "Pure silk twill with hand-rolled edges.", price: 58, category: "Fashion", seller: "Weave Story", height: 760, imageSeed: "scarf" },
+  { id: "chocolate-wingtip-derbies", title: "Chocolate Wingtip Derbies", description: "Rich chocolate-brown leather derbies with brogue detailing and a leather sole.", price: 118, category: "Shoes", seller: "Kicks by D", image: "/products/kicks-by-d/chocolate-wingtip-derbies.jpg", width: 1122, height: 1402 },
   { id: "candle-set", title: "Soy candle trio", description: "Cedar, fig and amber. 40-hour burn each.", price: 30, category: "Home", seller: "Clay & Co", height: 540, imageSeed: "candles" },
   { id: "lip-tint", title: "Hibiscus lip tint", description: "Buildable sheer colour, plant-based.", price: 12, category: "Beauty", seller: "Glow Naturals", height: 820, imageSeed: "lips" },
   { id: "classic-flap-mini-bag", title: "Classic Flap Mini Bag", description: "Pebbled leather mini bag with a top handle. Comes in tan, black or burgundy.", price: 62, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/classic-flap-mini-bag.jpg", width: 1024, height: 1024, colors: [{ name: "Tan", hex: "#c8956a" }, { name: "Black", hex: "#171717" }, { name: "Burgundy", hex: "#5c1a1f" }] },
@@ -93,4 +101,4 @@ export function formatPrice(n: number) {
 
 // Shown under "Popular on MoStore" on the search screen. Replace with real
 // search counts once there's traffic.
-export const popularSearches = ["Tote", "Leather", "Ceramic", "Lamp", "Coffee", "Print", "Candle", "Camera"];
+export const popularSearches = ["Tote", "Boots", "Brogues", "Leather", "Ceramic", "Lamp", "Coffee", "Print"];

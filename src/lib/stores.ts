@@ -23,6 +23,7 @@ export const stores: Store[] = [
   { slug: "weave-story", name: "Weave Story", tagline: "Woven textiles and accessories", color: "#be185d" },
   { slug: "retro-lens", name: "Retro Lens", tagline: "Film cameras and photography", color: "#334155" },
   { slug: "daybreak-roasters", name: "Daybreak Roasters", tagline: "Small-batch coffee", color: "#78350f" },
+  { slug: "kicks-by-d", name: "Kicks by D", tagline: "Classic leather boots and brogues", color: "#1c1917" },
 ];
 
 // Paths that belong to MoStore itself and can never be a store slug.
@@ -41,10 +42,10 @@ export function getStoreProducts(store: Store) {
 }
 
 export function storeInitials(name: string) {
-  return name
-    .replace(/&/g, " ")
-    .split(/\s+/)
-    .filter(Boolean)
+  const words = name.replace(/&/g, " ").split(/\s+/).filter(Boolean);
+  // Skip small lowercase words, so "Kicks by D" gives "KD", not "KB".
+  const main = words.filter((w) => /^[A-Z0-9]/.test(w));
+  return (main.length ? main : words)
     .slice(0, 2)
     .map((w) => w[0].toUpperCase())
     .join("");
