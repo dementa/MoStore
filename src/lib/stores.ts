@@ -1,5 +1,11 @@
 import { products } from "./products";
 
+export type FeaturedPick = {
+  id: string;
+  /** Small label on the slide, e.g. "Best seller". */
+  badge?: "New" | "Best seller" | "Trending" | "Popular";
+};
+
 export type Store = {
   slug: string;
   name: string;
@@ -10,11 +16,26 @@ export type Store = {
   logo?: string;
   /** Cover photo across the top of the store page. Without one, the first product's photo is used. */
   cover?: string;
+  /** Products in the "Featured products" slider on the store page. Without a list, the first few are used. */
+  featured?: FeaturedPick[];
 };
 
 // Placeholder stores until owners can sign up. A store's link is mostore.com/<slug>.
 export const stores: Store[] = [
-  { slug: "goba-collections", name: "Goba Collections", tagline: "Everyday pieces with a story", color: "#7c2d12", cover: "/products/goba-collections/classic-flap-mini-bag.jpg" },
+  {
+    slug: "goba-collections",
+    name: "Goba Collections",
+    tagline: "Everyday pieces with a story",
+    color: "#7c2d12",
+    cover: "/products/goba-collections/classic-flap-mini-bag.jpg",
+    featured: [
+      { id: "blush-pink-mini-tote", badge: "Best seller" },
+      { id: "taupe-scarf-tote", badge: "New" },
+      { id: "dome-bowling-bag", badge: "Trending" },
+      { id: "tangerine-top-handle-bag", badge: "Popular" },
+      { id: "cobalt-crossbody-satchel", badge: "New" },
+    ],
+  },
   { slug: "clay-and-co", name: "Clay & Co", tagline: "Handmade ceramics and candles", color: "#a16207" },
   { slug: "glow-naturals", name: "Glow Naturals", tagline: "Plant-based skincare", color: "#15803d" },
   { slug: "volt-shop", name: "Volt Shop", tagline: "Gadgets that just work", color: "#1d4ed8" },
@@ -25,7 +46,20 @@ export const stores: Store[] = [
   { slug: "weave-story", name: "Weave Story", tagline: "Woven textiles and accessories", color: "#be185d" },
   { slug: "retro-lens", name: "Retro Lens", tagline: "Film cameras and photography", color: "#334155" },
   { slug: "daybreak-roasters", name: "Daybreak Roasters", tagline: "Small-batch coffee", color: "#78350f" },
-  { slug: "kicks-by-d", name: "Kicks by D", tagline: "Classic leather boots and brogues", color: "#1c1917", cover: "/products/kicks-by-d/chocolate-wingtip-derbies.jpg" },
+  {
+    slug: "kicks-by-d",
+    name: "Kicks by D",
+    tagline: "Classic leather boots and brogues",
+    color: "#1c1917",
+    cover: "/products/kicks-by-d/chocolate-wingtip-derbies.jpg",
+    featured: [
+      { id: "black-chelsea-boots", badge: "Best seller" },
+      { id: "chocolate-wingtip-derbies", badge: "New" },
+      { id: "burnished-brown-chelsea-boots", badge: "Trending" },
+      { id: "black-full-brogue-oxfords", badge: "Popular" },
+      { id: "black-wingtip-lug-derby", badge: "New" },
+    ],
+  },
 ];
 
 // Paths that belong to MoStore itself and can never be a store slug.
@@ -41,6 +75,16 @@ export function getStoreByName(name: string) {
 
 export function getStoreProducts(store: Store) {
   return products.filter((p) => p.seller === store.name);
+}
+
+/** The store's featured products with their badges, for the slider on the store page. */
+export function getFeaturedProducts(store: Store) {
+  const items = getStoreProducts(store);
+  const picks: FeaturedPick[] = store.featured ?? items.slice(0, 5).map((p) => ({ id: p.id }));
+  return picks.flatMap(({ id, badge }) => {
+    const product = items.find((p) => p.id === id);
+    return product ? [{ product, badge }] : [];
+  });
 }
 
 export function storeCover(store: Store) {

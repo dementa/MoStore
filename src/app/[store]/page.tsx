@@ -2,11 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CategoryChips } from "@/components/CategoryChips";
+import { FeaturedCarousel } from "@/components/FeaturedCarousel";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { ShareButton } from "@/components/ShareButton";
 import { StoreLogo } from "@/components/StoreLogo";
 import { categories, filterProducts } from "@/lib/products";
-import { getStore, getStoreProducts, storeCover } from "@/lib/stores";
+import { getFeaturedProducts, getStore, getStoreProducts, storeCover } from "@/lib/stores";
 
 export default async function StorePage({
   params,
@@ -48,6 +49,10 @@ export default async function StorePage({
           <ShareButton title={store.name} path={`/${store.slug}`} />
         </div>
       </section>
+
+      {!category && (
+        <FeaturedCarousel items={getFeaturedProducts(store)} basePath={`/${store.slug}/p`} storeName={store.name} />
+      )}
 
       {storeCategories.length > 1 && (
         <CategoryChips base={`/${store.slug}`} categories={storeCategories} active={category} />
