@@ -22,7 +22,7 @@ export function PinCard({
   basePath?: string;
   showSeller?: boolean;
 }) {
-  const { addToCart, qtyInCart, setQty } = useStore();
+  const { addToCart, qtyInCart } = useStore();
   const [copied, setCopied] = useState(false);
   const [color, setColor] = useState(product.colors?.[0]?.name);
   const qty = qtyInCart(product.id, color);
@@ -80,40 +80,47 @@ export function PinCard({
         <Link href={href} className="line-clamp-2 text-sm font-medium leading-snug sm:text-base">
           {product.title}
         </Link>
-        <p className="mt-1 text-base font-bold sm:text-lg">{formatPrice(product.price)}</p>
+        <div className="mt-1.5 flex items-center justify-between gap-2">
+          <p className="text-base font-bold sm:text-lg">{formatPrice(product.price)}</p>
+          <button
+            onClick={() => addToCart(product.id, color)}
+            aria-label={
+              qty === 0
+                ? `Add ${product.title}${color ? ` (${color})` : ""} to cart`
+                : `${qty} in cart. Add one more ${product.title}`
+            }
+            className={`relative grid h-9 w-9 shrink-0 place-items-center rounded-full transition-colors active:scale-90 sm:h-10 sm:w-10 ${
+              qty === 0 ? "bg-brand/10 text-brand-dark hover:bg-brand hover:text-white" : "bg-brand text-white"
+            }`}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
+              <path d="M2.5 3.5h2.2l2.4 11a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 1.9-1.4L21 8H6" />
+              <circle cx="10" cy="20" r="1.3" />
+              <circle cx="17" cy="20" r="1.3" />
+            </svg>
+            {qty > 0 && (
+              <span
+                aria-live="polite"
+                className="absolute -right-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-black px-1 text-[11px] font-bold text-white ring-2 ring-white"
+              >
+                {qty}
+              </span>
+            )}
+          </button>
+        </div>
         <div className="hidden sm:block">
           <p className="mt-1 line-clamp-2 text-sm text-zinc-600">{product.description}</p>
         </div>
         {product.colors && color && <ColorPicker colors={product.colors} value={color} onChange={setColor} />}
-
-        {qty === 0 ? (
-          <button
-            onClick={() => addToCart(product.id, color)}
-            className="mt-2.5 h-10 w-full rounded-2xl bg-brand/10 text-sm font-semibold text-brand-dark transition-colors hover:bg-brand hover:text-white active:scale-[0.98] sm:mt-3 sm:h-12"
-          >
-            Add to cart
-          </button>
-        ) : (
-          <div className="mt-2.5 flex h-10 items-center overflow-hidden rounded-2xl bg-brand/10 text-brand-dark sm:mt-3 sm:h-12">
-            <button
-              onClick={() => setQty(product.id, qty - 1, color)}
-              aria-label={`Remove one ${product.title}`}
-              className="h-full w-10 text-lg font-semibold hover:bg-brand/15 sm:w-12"
-            >
-              −
-            </button>
-            <span className="flex-1 text-center text-sm font-semibold" aria-live="polite">
-              {qty} in cart
-            </span>
-            <button
-              onClick={() => setQty(product.id, qty + 1, color)}
-              aria-label={`Add one more ${product.title}`}
-              className="h-full w-10 text-lg font-semibold hover:bg-brand/15 sm:w-12"
-            >
-              +
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
