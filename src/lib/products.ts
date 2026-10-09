@@ -22,43 +22,51 @@ export const categories = [
 
 export type Category = (typeof categories)[number];
 
-// Placeholder catalog until a real backend exists. Heights vary on purpose so
-// the masonry feed gets its staggered look.
-const seed: Array<Omit<Product, "image" | "width"> & { imageSeed: string }> = [
-  { id: "linen-shirt", title: "Oversized linen shirt", description: "Breathable, relaxed fit linen for warm days.", price: 39, category: "Fashion", seller: "Goba Collections", height: 900, imageSeed: "linen" },
+// Catalog until a real backend exists. Most items are placeholders with
+// picsum photos (heights vary on purpose so the masonry feed staggers); real
+// products carry their own photo and its size.
+type SeedItem = Omit<Product, "image" | "width"> & ({ imageSeed: string } | { image: string; width: number });
+
+const seed: SeedItem[] = [
+  { id: "blush-pink-mini-tote", title: "Blush Pink Mini Tote", description: "Smooth leather with rolled handles and gold-tone hardware. Fits your phone, wallet and keys.", price: 68, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/blush-pink-mini-tote.jpg", width: 1200, height: 1200 },
   { id: "ceramic-vase", title: "Hand-thrown ceramic vase", description: "Speckled glaze, each one slightly different.", price: 54, category: "Home", seller: "Clay & Co", height: 720, imageSeed: "vase" },
   { id: "shea-butter", title: "Whipped shea butter", description: "Raw shea whipped with coconut oil and vanilla.", price: 18, category: "Beauty", seller: "Glow Naturals", height: 600, imageSeed: "shea" },
+  { id: "tangerine-top-handle-bag", title: "Tangerine Top-Handle Bag", description: "Glossy orange leather with a single top handle and a gold turn-lock flap.", price: 72, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/tangerine-top-handle-bag.jpg", width: 1200, height: 1200 },
   { id: "wireless-earbuds", title: "Wireless earbuds", description: "30-hour battery, noise isolation, pocket case.", price: 79, category: "Tech", seller: "Volt Shop", height: 520, imageSeed: "earbuds" },
   { id: "abstract-print", title: "Abstract sunset print", description: "Giclée print on archival paper, A3.", price: 32, category: "Art", seller: "Studio Nkem", height: 840, imageSeed: "sunsetart" },
+  { id: "cobalt-crossbody-satchel", title: "Cobalt Blue Satchel", description: "Zip-top satchel in bold cobalt leather. Carry it by the handles or with the detachable shoulder strap.", price: 78, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/cobalt-crossbody-satchel.jpg", width: 1200, height: 1200 },
   { id: "spice-set", title: "Jollof spice blend set", description: "Three blends, small-batch, no fillers.", price: 22, category: "Food", seller: "Pepper Pot", height: 640, imageSeed: "spices" },
+  { id: "taupe-scarf-tote", title: "Taupe Tote with Silk Scarf", description: "Roomy pebbled-leather tote with a printed silk scarf tied on the handle. Fits a laptop.", price: 82, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/taupe-scarf-tote.jpg", width: 1000, height: 1500 },
   { id: "canvas-backpack", title: "Waxed canvas backpack", description: "Water resistant, leather straps, 20L.", price: 95, category: "Outdoors", seller: "Trail Goods", height: 780, imageSeed: "backpack" },
-  { id: "gold-hoops", title: "Chunky gold hoops", description: "18k gold plated, hypoallergenic posts.", price: 28, category: "Fashion", seller: "Goba Collections", height: 560, imageSeed: "hoops" },
   { id: "rattan-lamp", title: "Rattan pendant lamp", description: "Woven shade that throws soft patterned light.", price: 68, category: "Home", seller: "Nest Living", height: 960, imageSeed: "lamp" },
   { id: "face-oil", title: "Rosehip face oil", description: "Cold-pressed, for glow and even tone.", price: 26, category: "Beauty", seller: "Glow Naturals", height: 700, imageSeed: "faceoil" },
   { id: "mech-keyboard", title: "Compact mechanical keyboard", description: "75% layout, hot-swap switches, RGB.", price: 119, category: "Tech", seller: "Volt Shop", height: 480, imageSeed: "keyboard" },
+  { id: "olive-work-tote", title: "Olive Leather Work Tote", description: "Structured olive leather tote, big enough for a laptop and everything else.", price: 88, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/olive-work-tote.jpg", width: 704, height: 1012 },
   { id: "kente-tote", title: "Kente pattern tote", description: "Hand-woven panel on sturdy cotton.", price: 35, category: "Fashion", seller: "Weave Story", height: 820, imageSeed: "tote" },
+  { id: "ivory-charm-tote", title: "Ivory Tote with Gold Charm", description: "Structured ivory leather tote with a gold chain charm. Dressy enough for evenings.", price: 75, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/ivory-charm-tote.jpg", width: 688, height: 1024 },
   { id: "plant-stand", title: "Mid-century plant stand", description: "Solid wood, fits pots up to 25cm.", price: 45, category: "Home", seller: "Nest Living", height: 880, imageSeed: "plants" },
   { id: "film-camera", title: "Refurbished film camera", description: "35mm point-and-shoot, tested and cleaned.", price: 140, category: "Tech", seller: "Retro Lens", height: 620, imageSeed: "camera" },
+  { id: "moss-suede-mini-tote", title: "Moss Suede Mini Tote", description: "Soft moss-green suede with winged sides and a gold buckle strap.", price: 70, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/moss-suede-mini-tote.jpg", width: 1024, height: 1536 },
   { id: "line-drawing", title: "Minimal line drawing", description: "Framed ink drawing, 30×40cm.", price: 48, category: "Art", seller: "Studio Nkem", height: 740, imageSeed: "lineart" },
   { id: "coffee-beans", title: "Single-origin coffee beans", description: "Medium roast, notes of cocoa and citrus.", price: 16, category: "Food", seller: "Daybreak Roasters", height: 560, imageSeed: "coffee" },
   { id: "hammock", title: "Camping hammock", description: "Parachute nylon with tree straps, 300kg rated.", price: 42, category: "Outdoors", seller: "Trail Goods", height: 680, imageSeed: "hammock" },
+  { id: "saddle-top-handle-bag", title: "Saddle Top-Handle Bag", description: "Curved saddle shape with a gold clasp. Comes in red or black.", price: 66, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/saddle-top-handle-bag.jpg", width: 1080, height: 1080 },
   { id: "silk-scarf", title: "Printed silk scarf", description: "Pure silk twill with hand-rolled edges.", price: 58, category: "Fashion", seller: "Weave Story", height: 760, imageSeed: "scarf" },
   { id: "candle-set", title: "Soy candle trio", description: "Cedar, fig and amber. 40-hour burn each.", price: 30, category: "Home", seller: "Clay & Co", height: 540, imageSeed: "candles" },
   { id: "lip-tint", title: "Hibiscus lip tint", description: "Buildable sheer colour, plant-based.", price: 12, category: "Beauty", seller: "Glow Naturals", height: 820, imageSeed: "lips" },
+  { id: "classic-flap-mini-bag", title: "Classic Flap Mini Bag", description: "Pebbled leather mini bag with a top handle. Comes in tan, black or burgundy.", price: 62, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/classic-flap-mini-bag.jpg", width: 1024, height: 1024 },
   { id: "honey-jar", title: "Raw forest honey", description: "Unfiltered honey from local beekeepers.", price: 14, category: "Food", seller: "Pepper Pot", height: 700, imageSeed: "honey" },
   { id: "pottery-print", title: "Market day photo print", description: "Signed photographic print, 40×50cm.", price: 60, category: "Art", seller: "Retro Lens", height: 900, imageSeed: "market" },
   { id: "water-bottle", title: "Insulated water bottle", description: "Keeps cold 24h, hot 12h. 750ml.", price: 25, category: "Outdoors", seller: "Trail Goods", height: 600, imageSeed: "bottle" },
-  { id: "wrap-dress", title: "Ankara print wrap dress", description: "Bold wax print cotton, ties at the waist.", price: 72, category: "Fashion", seller: "Goba Collections", height: 920, imageSeed: "wrapdress" },
-  { id: "leather-sandals", title: "Hand-stitched leather sandals", description: "Full-grain leather that softens with wear.", price: 49, category: "Fashion", seller: "Goba Collections", height: 640, imageSeed: "sandals" },
-  { id: "bead-necklace", title: "Glass bead necklace", description: "Recycled glass beads, strung by hand.", price: 24, category: "Fashion", seller: "Goba Collections", height: 780, imageSeed: "beads" },
+  { id: "dome-bowling-bag", title: "Dome Bowling Bag", description: "Smooth leather bowling bag with a zip top and rolled handles. Comes in black, ivory or chestnut.", price: 95, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/dome-bowling-bag.jpg", width: 1199, height: 1799 },
   { id: "smart-lamp", title: "Smart desk lamp", description: "Adjustable warmth, USB-C charging base.", price: 64, category: "Tech", seller: "Volt Shop", height: 760, imageSeed: "desklamp" },
 ];
 
-export const products: Product[] = seed.map(({ imageSeed, ...p }) => ({
-  ...p,
-  width: 600,
-  image: `https://picsum.photos/seed/${imageSeed}/600/${p.height}`,
-}));
+export const products: Product[] = seed.map((item) => {
+  if (!("imageSeed" in item)) return item;
+  const { imageSeed, ...p } = item;
+  return { ...p, width: 600, image: `https://picsum.photos/seed/${imageSeed}/600/${p.height}` };
+});
 
 export function getProduct(id: string) {
   return products.find((p) => p.id === id);
@@ -81,4 +89,4 @@ export function formatPrice(n: number) {
 
 // Shown under "Popular on MoStore" on the search screen. Replace with real
 // search counts once there's traffic.
-export const popularSearches = ["Ankara", "Gold", "Leather", "Linen", "Ceramic", "Lamp", "Coffee", "Print"];
+export const popularSearches = ["Tote", "Leather", "Ceramic", "Lamp", "Coffee", "Print", "Candle", "Camera"];
