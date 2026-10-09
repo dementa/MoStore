@@ -72,7 +72,7 @@ export function SearchView({ store }: { store?: Store }) {
           (document.activeElement as HTMLElement | null)?.blur();
         }}
       >
-        <label className="flex h-14 items-center gap-3 rounded-2xl border-2 border-zinc-300 px-4 focus-within:border-zinc-500">
+        <label className="flex h-14 items-center gap-3 rounded-2xl border-2 border-zinc-300 bg-white px-4 focus-within:border-zinc-500">
           <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 fill-black" aria-hidden>
             <path d="M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.42 1.4-5.39-5.38A8 8 0 1 1 10 2Zm0 2.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z" />
           </svg>

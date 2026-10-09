@@ -4,6 +4,7 @@
 @theme {
   --color-brand: #e60023;
   --color-brand-dark: #ad081b;
+  --color-canvas: #f4f5f7;
 }
 
 @theme inline {
@@ -12,7 +13,7 @@
 }
 
 body {
-  background: #ffffff;
+  background: var(--color-canvas);
   color: #111111;
 }
 

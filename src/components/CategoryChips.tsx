@@ -20,7 +20,7 @@ export function CategoryChips({
       className={`shrink-0 border-b-[3px] pb-1.5 text-base font-semibold sm:rounded-full sm:border-0 sm:px-4 sm:py-2 sm:text-sm ${
         on
           ? "border-black sm:bg-black sm:text-white"
-          : "border-transparent text-zinc-700 sm:bg-zinc-100 sm:text-black sm:hover:bg-zinc-200"
+          : "border-transparent text-zinc-700 sm:bg-white sm:text-black sm:hover:bg-zinc-200"
       }`}
     >
       {label}

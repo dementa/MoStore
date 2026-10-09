@@ -16,7 +16,7 @@ export function ProductDetail({
   const store = getStoreByName(product.seller);
 
   return (
-    <article className="mx-auto mb-12 grid max-w-5xl overflow-hidden rounded-[32px] shadow-[0_1px_20px_rgba(0,0,0,0.1)] md:grid-cols-2">
+    <article className="mx-auto mb-12 grid max-w-5xl overflow-hidden rounded-[32px] bg-white shadow-[0_1px_20px_rgba(0,0,0,0.1)] md:grid-cols-2">
       <Image
         src={product.image}
         alt={product.title}

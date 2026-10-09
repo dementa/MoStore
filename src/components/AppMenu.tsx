@@ -47,7 +47,7 @@ export function AppMenu({ appName = "MoStore", store }: { appName?: string; stor
         onClick={() => setOpen((o) => !o)}
         aria-label="App and notifications"
         aria-expanded={open}
-        className="relative grid h-12 w-12 place-items-center rounded-full hover:bg-zinc-100"
+        className="relative grid h-12 w-12 place-items-center rounded-full hover:bg-white"
       >
         <svg viewBox="0 0 24 24" className="h-6 w-6 fill-zinc-700" aria-hidden>
           <path d="M12 2a7 7 0 0 1 7 7v4.6l1.7 2.9A1 1 0 0 1 19.8 18H4.2a1 1 0 0 1-.9-1.5L5 13.6V9a7 7 0 0 1 7-7Zm-3 17h6a3 3 0 0 1-6 0Z" />

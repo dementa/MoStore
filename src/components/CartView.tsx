@@ -76,7 +76,7 @@ export function CartView({ store }: { store?: Store }) {
         </ul>
       </section>
 
-      <aside className="h-fit rounded-3xl bg-zinc-100 p-6 md:mt-14">
+      <aside className="h-fit rounded-3xl bg-white p-6 md:mt-14">
         <div className="flex justify-between text-sm">
           <span>Subtotal</span>
           <span className="font-semibold">{formatPrice(subtotal)}</span>
