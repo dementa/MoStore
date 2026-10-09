@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { CheckoutSheet } from "@/components/CheckoutSheet";
 import { useStore } from "@/components/StoreProvider";
 import type { Store } from "@/lib/stores";
 import { formatPrice, products } from "@/lib/products";
@@ -16,6 +18,14 @@ export function CartView({ store }: { store?: Store }) {
   });
   const productHref = (id: string) => (store ? `/${store.slug}/p/${id}` : `/product/${id}`);
   const subtotal = lines.reduce((sum, l) => sum + l.product.price * l.qty, 0);
+  const itemCount = lines.reduce((n, l) => n + l.qty, 0);
+  const [checkingOut, setCheckingOut] = useState(false);
+
+  function closeCheckout(placed: boolean) {
+    setCheckingOut(false);
+    // Only the lines shown here were ordered; a store's cart leaves other stores' items alone.
+    if (placed) lines.forEach((l) => setQty(l.id, 0, l.color));
+  }
 
   if (lines.length === 0) {
     return (
@@ -92,13 +102,14 @@ export function CartView({ store }: { store?: Store }) {
         </div>
         <p className="mt-1 text-xs text-zinc-600">Shipping calculated at checkout.</p>
         <button
-          disabled
-          className="mt-6 w-full rounded-full bg-brand py-3 text-sm font-semibold text-white opacity-60"
-          title="Checkout coming soon"
+          onClick={() => setCheckingOut(true)}
+          className="mt-6 w-full rounded-full bg-brand py-3 text-sm font-semibold text-white hover:bg-brand-dark"
         >
-          Checkout (coming soon)
+          Checkout
         </button>
       </aside>
+
+      {checkingOut && <CheckoutSheet total={subtotal} itemCount={itemCount} onClose={closeCheckout} />}
     </div>
   );
 }
