@@ -1,10 +1,17 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { ProductDetail } from "@/components/ProductDetail";
 import { getProduct, products } from "@/lib/products";
+import { productMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
   return products.map((p) => ({ id: p.id }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const product = getProduct((await params).id);
+  return product ? productMetadata(product, `/product/${product.id}`) : {};
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {

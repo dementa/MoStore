@@ -40,7 +40,12 @@ export function ProductDetail({
             ) : (
               <p className="text-sm text-zinc-600">{product.category}</p>
             )}
-            <ShareButton title={product.title} path={productPath} />
+            <ShareButton
+              title={product.title}
+              text={`${product.title} · ${formatPrice(product.price)}`}
+              path={productPath}
+              imagePath={`/og/${product.id}`}
+            />
           </div>
           <h1 className="mt-1 text-3xl font-semibold">{product.title}</h1>
           <p className="mt-3 text-2xl font-semibold">{formatPrice(product.price)}</p>

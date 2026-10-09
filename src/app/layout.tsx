@@ -13,7 +13,17 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Absolute base for link-preview images. Set NEXT_PUBLIC_SITE_URL once the
+// custom domain is live (e.g. https://mostore.com); on Vercel it otherwise
+// uses the project's production address.
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : "http://localhost:3000");
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "MoStore",
   description: "E-commerce for every one. Discover, save and shop.",
   applicationName: "MoStore",

@@ -9,9 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "geist": "1.7.2",
     "next": "15.5.27",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "sharp": "0.35.5",
     "swiper": "14.2.0",
     "web-push": "^3.6.7"
   },

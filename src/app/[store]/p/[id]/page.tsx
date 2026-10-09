@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { MasonryGrid } from "@/components/MasonryGrid";
 import { ProductDetail } from "@/components/ProductDetail";
 import { getProduct } from "@/lib/products";
+import { productMetadata } from "@/lib/seo";
 import { getStore, getStoreProducts, stores } from "@/lib/stores";
 
 type Props = { params: Promise<{ store: string; id: string }> };
@@ -20,8 +21,8 @@ async function load(params: Props["params"]) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { product } = await load(params);
-  return { title: product.title, description: product.description };
+  const { store, product } = await load(params);
+  return productMetadata(product, `/${store.slug}/p/${product.id}`);
 }
 
 export default async function StoreProductPage({ params }: Props) {
