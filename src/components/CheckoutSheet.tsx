@@ -26,21 +26,21 @@ const METHODS: {
     badge: { text: "Airtel", className: "bg-red-600 text-white" },
   },
   {
+    id: "cod",
+    name: "Cash on delivery",
+    detail: "Pay when your order arrives",
+    badge: { text: "Cash", className: "bg-emerald-600 text-white" },
+  },
+  {
     id: "bank",
     name: "Bank transfer",
     detail: "Coming soon",
     badge: { text: "Bank", className: "bg-zinc-200 text-zinc-600" },
     comingSoon: true,
   },
-  {
-    id: "cod",
-    name: "Cash on delivery",
-    detail: "Pay when your order arrives",
-    badge: { text: "Cash", className: "bg-emerald-600 text-white" },
-  },
 ];
 
-type Details = { name: string; phone: string; address: string; note: string };
+type Details = { name: string; phone: string; address: string };
 
 const DETAILS_KEY = "mostore:checkout-details";
 
@@ -58,7 +58,7 @@ export function CheckoutSheet({
   /** `placed` is true once the order went through, so the cart can be emptied. */
   onClose: (placed: boolean) => void;
 }) {
-  const [details, setDetails] = useState<Details>({ name: "", phone: "", address: "", note: "" });
+  const [details, setDetails] = useState<Details>({ name: "", phone: "", address: "" });
   const [method, setMethod] = useState<Method | null>(null);
   const [momoPhone, setMomoPhone] = useState("");
   const [tried, setTried] = useState(false);
@@ -68,7 +68,7 @@ export function CheckoutSheet({
   useEffect(() => {
     try {
       const raw = localStorage.getItem(DETAILS_KEY);
-      if (raw) setDetails((d) => ({ ...d, ...JSON.parse(raw), note: "" }));
+      if (raw) setDetails((d) => ({ ...d, ...JSON.parse(raw) }));
     } catch {}
   }, []);
 
@@ -171,19 +171,20 @@ export function CheckoutSheet({
               />
               {error(errors.address)}
             </div>
-            <textarea
-              className={`${field} resize-none`}
-              rows={2}
-              placeholder="Note for the seller (optional)"
-              value={details.note}
-              onChange={set("note")}
-            />
           </fieldset>
 
           <fieldset>
-            <legend className="mb-2 text-sm font-semibold">Payment method</legend>
+            <legend className="mb-2 flex w-full items-baseline justify-between text-sm font-semibold">
+              Payment method
+              {method && (
+                <button type="button" onClick={() => setMethod(null)} className="text-brand">
+                  Change
+                </button>
+              )}
+            </legend>
             <div className="flex flex-col gap-2">
-              {METHODS.map((m) => (
+              {/* Once a method is picked the others hide to give its fields room. */}
+              {METHODS.filter((m) => !method || m.id === method).map((m) => (
                 <label
                   key={m.id}
                   className={`flex items-center gap-3 rounded-2xl p-3 ring-1 ${
