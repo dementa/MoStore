@@ -9,8 +9,11 @@ import { StoreLogo } from "./StoreLogo";
 export function ProductDetail({
   product,
   categoryHref,
+  chatHref,
 }: {
   product: Product;
+  /** The chat with this product's seller. */
+  chatHref: string;
   /** Omit inside a store, where there's no category feed to go back to. */
   categoryHref?: string;
 }) {
@@ -48,7 +51,7 @@ export function ProductDetail({
           <p className="mt-3 text-2xl font-semibold">{formatPrice(product.price)}</p>
           <p className="mt-4 text-zinc-700">{product.description}</p>
         </div>
-        <ProductActions id={product.id} colors={product.colors} />
+        <ProductActions id={product.id} colors={product.colors} chatHref={chatHref} />
         {store && (
           <Link href={`/${store.slug}`} className="group mt-auto flex items-center gap-3">
             <StoreLogo store={store} size={48} />

@@ -45,6 +45,7 @@ export function Header() {
       <div className="flex-1 sm:hidden" />
       {navPill("/", "Shop")}
       {navPill("/saved", "Saved")}
+      {navPill("/messages", "Messages")}
 
       <form onSubmit={onSubmit} className="hidden flex-1 sm:block">
         <label className="flex items-center gap-2 rounded-full bg-white px-4 py-3 focus-within:ring-4 focus-within:ring-sky-200">

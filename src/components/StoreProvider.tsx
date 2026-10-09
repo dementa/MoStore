@@ -4,6 +4,12 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 type CartLine = { id: string; qty: number; color?: string };
 
+/** One message in a chat about a product. `offer` is a price the buyer proposed. */
+export type ChatMessage = { id: string; from: "buyer" | "seller"; text?: string; offer?: number; at: number };
+
+/** Chats keyed by product id, so each product has one conversation with its seller. */
+type Chats = Record<string, ChatMessage[]>;
+
 // One cart line per product and colour.
 const isLine = (l: CartLine, id: string, color?: string) => l.id === id && l.color === color;
 
@@ -20,6 +26,8 @@ type StoreState = {
   setQty: (id: string, qty: number, color?: string) => void;
   qtyInCart: (id: string, color?: string) => number;
   cartCount: number;
+  chats: Chats;
+  sendMessage: (productId: string, message: { text?: string; offer?: number }) => void;
 };
 
 const StoreContext = createContext<StoreState | null>(null);
@@ -29,6 +37,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [saved, setSaved] = useState<string[]>([]);
   const [cart, setCart] = useState<CartLine[]>([]);
   const [following, setFollowing] = useState<string[]>([]);
+  const [chats, setChats] = useState<Chats>({});
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -39,6 +48,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         setSaved(data.saved ?? []);
         setCart(data.cart ?? []);
         setFollowing(data.following ?? []);
+        setChats(data.chats ?? {});
       }
     } catch {}
     setLoaded(true);
@@ -47,9 +57,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!loaded) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ saved, cart, following }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ saved, cart, following, chats }));
     } catch {}
-  }, [saved, cart, following, loaded]);
+  }, [saved, cart, following, chats, loaded]);
 
   const value: StoreState = {
     saved,
@@ -75,6 +85,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       ),
     qtyInCart: (id, color) => cart.find((l) => isLine(l, id, color))?.qty ?? 0,
     cartCount: cart.reduce((n, l) => n + l.qty, 0),
+    chats,
+    sendMessage: (productId, message) =>
+      setChats((c) => ({
+        ...c,
+        [productId]: [
+          ...(c[productId] ?? []),
+          { id: `${Date.now()}-${Math.random().toString(36).slice(2)}`, from: "buyer", at: Date.now(), ...message },
+        ],
+      })),
   };
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

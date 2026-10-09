@@ -11,6 +11,7 @@ const ICONS = {
   search:
     "M10 2a8 8 0 0 1 6.32 12.9l5.39 5.4-1.42 1.4-5.39-5.38A8 8 0 1 1 10 2Zm0 2.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z",
   saved: "M6 2h12a1 1 0 0 1 1 1v19l-7-4.5L5 22V3a1 1 0 0 1 1-1Z",
+  messages: "M5 3h14a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-6 4V5a2 2 0 0 1 2-2Z",
   cart: "M7 4V3a5 5 0 0 1 10 0v1h3a1 1 0 0 1 1 1.1l-1.5 15A2 2 0 0 1 17.5 22h-11a2 2 0 0 1-2-1.9L3 5.1A1 1 0 0 1 4 4h3Zm2 0h6V3a3 3 0 0 0-6 0v1Z",
 };
 
@@ -31,8 +32,12 @@ export function BottomNav({ store }: { store?: Store }) {
     { href: base || "/", label: "Home", icon: "home" },
     { href: `${base}/search`, label: "Search", icon: "search" },
     ...(store ? [] : [{ href: "/saved", label: "Saved", icon: "saved" as const }]),
+    { href: `${base}/messages`, label: "Messages", icon: "messages" },
     { href: `${base}/cart`, label: "Cart", icon: "cart", badge: cartCount || undefined },
   ];
+
+  // A chat has its own message bar along the bottom.
+  if (pathname.includes("/chat/")) return null;
 
   return (
     <nav

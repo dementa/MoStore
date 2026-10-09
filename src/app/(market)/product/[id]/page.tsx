@@ -29,6 +29,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       <ProductDetail
         product={product}
         categoryHref={`/?category=${product.category.toLowerCase()}`}
+        chatHref={`/chat/${product.id}`}
       />
       <h2 className="mb-6 text-center text-xl font-semibold">More like this</h2>
       <MasonryGrid products={related} />
