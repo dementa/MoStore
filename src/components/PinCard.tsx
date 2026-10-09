@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { formatAmount, formatPrice, type Product } from "@/lib/products";
 import { shareLink } from "@/lib/share";
 import { useShareImage } from "@/lib/useShareImage";
-import { getStoreByName } from "@/lib/stores";
+import { getStoreByName, storeProductPath } from "@/lib/stores";
 import { ColorPicker } from "./ColorPicker";
 import { useStore } from "./StoreProvider";
 
@@ -64,7 +64,8 @@ export function PinCard({
     setTapAgain(false);
     const text = `${product.title} · ${formatPrice(product.price)}`;
     const image = await shareImage.get();
-    const result = await shareLink({ title: product.title, text, path: href, image });
+    // Shared links go to the seller's store, wherever the card is shown.
+    const result = await shareLink({ title: product.title, text, path: storeProductPath(product), image });
     if (result === "copied") {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);

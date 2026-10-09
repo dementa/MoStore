@@ -120,13 +120,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
                   gap: 12,
                   padding: "14px 26px",
                   borderRadius: 999,
-                  background: "#111111",
+                  background: brand,
                   color: "#fff",
                   fontSize: 24,
                   fontWeight: 600,
                 }}
               >
-                Shop on MoStore
+                Shop now
               </div>
             </div>
           </div>

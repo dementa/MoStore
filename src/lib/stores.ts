@@ -1,4 +1,4 @@
-import { products } from "./products";
+import { products, type Product } from "./products";
 
 export type FeaturedPick = {
   id: string;
@@ -85,6 +85,15 @@ export function getFeaturedProducts(store: Store) {
     const product = items.find((p) => p.id === id);
     return product ? [{ product, badge }] : [];
   });
+}
+
+/**
+ * The product's page inside the store that sells it. Shared links always use
+ * this, so customers land in the seller's store, not the MoStore feed.
+ */
+export function storeProductPath(product: Product) {
+  const store = getStoreByName(product.seller);
+  return store ? `/${store.slug}/p/${product.id}` : `/product/${product.id}`;
 }
 
 export function storeCover(store: Store) {

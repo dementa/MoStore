@@ -21,8 +21,8 @@ async function load(params: Props["params"]) {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { store, product } = await load(params);
-  return productMetadata(product, `/${store.slug}/p/${product.id}`);
+  const { product } = await load(params);
+  return productMetadata(product);
 }
 
 export default async function StoreProductPage({ params }: Props) {
@@ -31,7 +31,7 @@ export default async function StoreProductPage({ params }: Props) {
 
   return (
     <>
-      <ProductDetail product={product} productPath={`/${store.slug}/p/${product.id}`} />
+      <ProductDetail product={product} />
       {more.length > 0 && (
         <>
           <h2 className="mb-6 text-center text-xl font-semibold">More from {store.name}</h2>

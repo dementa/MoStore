@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, type Product } from "@/lib/products";
-import { getStoreByName } from "@/lib/stores";
+import { getStoreByName, storeProductPath } from "@/lib/stores";
 import { ProductActions } from "./ProductActions";
 import { ShareButton } from "./ShareButton";
 import { StoreLogo } from "./StoreLogo";
@@ -9,11 +9,8 @@ import { StoreLogo } from "./StoreLogo";
 export function ProductDetail({
   product,
   categoryHref,
-  productPath,
 }: {
   product: Product;
-  /** This page's path, for sharing. */
-  productPath: string;
   /** Omit inside a store, where there's no category feed to go back to. */
   categoryHref?: string;
 }) {
@@ -43,7 +40,7 @@ export function ProductDetail({
             <ShareButton
               title={product.title}
               text={`${product.title} · ${formatPrice(product.price)}`}
-              path={productPath}
+              path={storeProductPath(product)}
               imagePath={`/og/${product.id}`}
             />
           </div>
