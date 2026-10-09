@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { AppMenu } from "./AppMenu";
 import { useStore } from "./StoreProvider";
 
 export function Header() {
@@ -66,6 +67,7 @@ export function Header() {
           <path d="M6 2h12a1 1 0 0 1 1 1v19l-7-4.5L5 22V3a1 1 0 0 1 1-1Z" />
         </svg>
       </Link>
+      <AppMenu />
       <Link
         href="/cart"
         aria-label={`Cart (${cartCount})`}
