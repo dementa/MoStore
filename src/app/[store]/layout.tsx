@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
-import { InstallSheet } from "@/components/InstallSheet";
 import { StoreHeader } from "@/components/StoreHeader";
+import { StorePrompts } from "@/components/StorePrompts";
 import { getStore, stores } from "@/lib/stores";
 
 type Props = { params: Promise<{ store: string }> };
@@ -45,7 +45,7 @@ export default async function StoreLayout({ children, params }: Props & { childr
     <div style={brand}>
       <StoreHeader store={store} />
       <main className="px-4 pb-16 pt-2">{children}</main>
-      <InstallSheet store={store} />
+      <StorePrompts store={store} />
     </div>
   );
 }

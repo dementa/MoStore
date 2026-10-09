@@ -2,36 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useInstall } from "@/lib/useInstall";
-
-const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-
-function urlBase64ToUint8Array(base64: string) {
-  const padded = (base64 + "=".repeat((4 - (base64.length % 4)) % 4))
-    .replace(/-/g, "+")
-    .replace(/_/g, "/");
-  return Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
-}
+import { usePush } from "@/lib/usePush";
 
 export function AppMenu({ appName = "MoStore", store }: { appName?: string; store?: string }) {
   const [open, setOpen] = useState(false);
   const { installed, canInstall, isIOS, install } = useInstall();
-  const [pushSupported, setPushSupported] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
+  const push = usePush(store);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setPushSupported("serviceWorker" in navigator && "PushManager" in window && "Notification" in window);
-
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/sw.js", { scope: "/", updateViaCache: "none" })
-        .then((reg) => reg.pushManager?.getSubscription())
-        .then((sub) => setSubscribed(!!sub))
-        .catch(() => {});
-    }
-  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -42,35 +21,11 @@ export function AppMenu({ appName = "MoStore", store }: { appName?: string; stor
     return () => document.removeEventListener("mousedown", onClick);
   }, [open]);
 
-  async function sendTest(sub: PushSubscription) {
-    const res = await fetch("/api/push/test", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ subscription: sub, store }),
-    });
-    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? "Could not send");
-  }
-
-  async function enableNotifications() {
-    if (!VAPID_PUBLIC_KEY) return setMessage("Notifications aren't set up on this server yet.");
+  async function run(action: () => Promise<string | null>) {
     setBusy(true);
     setMessage(null);
     try {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        setMessage("Notifications are blocked. You can allow them in your browser's site settings.");
-        return;
-      }
-      const reg = await navigator.serviceWorker.ready;
-      const sub =
-        (await reg.pushManager.getSubscription()) ??
-        (await reg.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-        }));
-      setSubscribed(true);
-      await sendTest(sub);
-      setMessage("You're in! Check for a test notification.");
+      setMessage(await action());
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -78,28 +33,11 @@ export function AppMenu({ appName = "MoStore", store }: { appName?: string; stor
     }
   }
 
-  async function disableNotifications() {
-    setBusy(true);
-    const reg = await navigator.serviceWorker.ready;
-    await (await reg.pushManager.getSubscription())?.unsubscribe();
-    setSubscribed(false);
-    setMessage(null);
-    setBusy(false);
-  }
-
-  async function test() {
-    setBusy(true);
-    try {
-      const reg = await navigator.serviceWorker.ready;
-      const sub = await reg.pushManager.getSubscription();
-      if (sub) await sendTest(sub);
-      setMessage("Test sent.");
-    } catch (err) {
-      setMessage(err instanceof Error ? err.message : "Something went wrong.");
-    } finally {
-      setBusy(false);
-    }
-  }
+  const enableNotifications = () => run(push.enable);
+  const disableNotifications = () => run(async () => (await push.disable(), null));
+  const test = () => run(async () => (await push.test(), "Test sent."));
+  const pushSupported = push.supported;
+  const subscribed = push.subscribed;
 
   const iosNeedsInstall = isIOS && !installed;
 
