@@ -2,15 +2,19 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type CartLine = { id: string; qty: number };
+type CartLine = { id: string; qty: number; color?: string };
+
+// One cart line per product and colour.
+const isLine = (l: CartLine, id: string, color?: string) => l.id === id && l.color === color;
 
 type StoreState = {
   saved: string[];
   cart: CartLine[];
   toggleSave: (id: string) => void;
   isSaved: (id: string) => boolean;
-  addToCart: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
+  addToCart: (id: string, color?: string) => void;
+  setQty: (id: string, qty: number, color?: string) => void;
+  qtyInCart: (id: string, color?: string) => number;
   cartCount: number;
 };
 
@@ -47,16 +51,19 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     toggleSave: (id) =>
       setSaved((s) => (s.includes(id) ? s.filter((x) => x !== id) : [id, ...s])),
     isSaved: (id) => saved.includes(id),
-    addToCart: (id) =>
+    addToCart: (id, color) =>
       setCart((c) => {
-        const line = c.find((l) => l.id === id);
-        if (line) return c.map((l) => (l.id === id ? { ...l, qty: l.qty + 1 } : l));
-        return [...c, { id, qty: 1 }];
+        const line = c.find((l) => isLine(l, id, color));
+        if (line) return c.map((l) => (isLine(l, id, color) ? { ...l, qty: l.qty + 1 } : l));
+        return [...c, color ? { id, qty: 1, color } : { id, qty: 1 }];
       }),
-    setQty: (id, qty) =>
+    setQty: (id, qty, color) =>
       setCart((c) =>
-        qty <= 0 ? c.filter((l) => l.id !== id) : c.map((l) => (l.id === id ? { ...l, qty } : l)),
+        qty <= 0
+          ? c.filter((l) => !isLine(l, id, color))
+          : c.map((l) => (isLine(l, id, color) ? { ...l, qty } : l)),
       ),
+    qtyInCart: (id, color) => cart.find((l) => isLine(l, id, color))?.qty ?? 0,
     cartCount: cart.reduce((n, l) => n + l.qty, 0),
   };
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { formatPrice, type Product } from "@/lib/products";
 import { getStoreByName } from "@/lib/stores";
+import { ColorPicker } from "./ColorPicker";
 import { useStore } from "./StoreProvider";
 
 const SHARE =
@@ -21,9 +22,10 @@ export function PinCard({
   basePath?: string;
   showSeller?: boolean;
 }) {
-  const { addToCart, cart, setQty } = useStore();
+  const { addToCart, qtyInCart, setQty } = useStore();
   const [copied, setCopied] = useState(false);
-  const qty = cart.find((l) => l.id === product.id)?.qty ?? 0;
+  const [color, setColor] = useState(product.colors?.[0]?.name);
+  const qty = qtyInCart(product.id, color);
   const href = `${basePath}/${product.id}`;
   const store = getStoreByName(product.seller);
 
@@ -82,10 +84,11 @@ export function PinCard({
         <div className="hidden sm:block">
           <p className="mt-1 line-clamp-2 text-sm text-zinc-600">{product.description}</p>
         </div>
+        {product.colors && color && <ColorPicker colors={product.colors} value={color} onChange={setColor} />}
 
         {qty === 0 ? (
           <button
-            onClick={() => addToCart(product.id)}
+            onClick={() => addToCart(product.id, color)}
             className="mt-2.5 h-10 w-full rounded-2xl bg-brand/10 text-sm font-semibold text-brand-dark transition-colors hover:bg-brand hover:text-white active:scale-[0.98] sm:mt-3 sm:h-12"
           >
             Add to cart
@@ -93,7 +96,7 @@ export function PinCard({
         ) : (
           <div className="mt-2.5 flex h-10 items-center overflow-hidden rounded-2xl bg-brand/10 text-brand-dark sm:mt-3 sm:h-12">
             <button
-              onClick={() => setQty(product.id, qty - 1)}
+              onClick={() => setQty(product.id, qty - 1, color)}
               aria-label={`Remove one ${product.title}`}
               className="h-full w-10 text-lg font-semibold hover:bg-brand/15 sm:w-12"
             >
@@ -103,7 +106,7 @@ export function PinCard({
               {qty} in cart
             </span>
             <button
-              onClick={() => setQty(product.id, qty + 1)}
+              onClick={() => setQty(product.id, qty + 1, color)}
               aria-label={`Add one more ${product.title}`}
               className="h-full w-10 text-lg font-semibold hover:bg-brand/15 sm:w-12"
             >

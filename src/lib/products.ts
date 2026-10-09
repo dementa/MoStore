@@ -1,3 +1,5 @@
+export type ProductColor = { name: string; hex: string };
+
 export type Product = {
   id: string;
   title: string;
@@ -8,6 +10,8 @@ export type Product = {
   image: string;
   width: number;
   height: number;
+  /** Colours the customer can choose from, when the product comes in more than one. */
+  colors?: ProductColor[];
 };
 
 export const categories = [
@@ -50,15 +54,15 @@ const seed: SeedItem[] = [
   { id: "line-drawing", title: "Minimal line drawing", description: "Framed ink drawing, 30×40cm.", price: 48, category: "Art", seller: "Studio Nkem", height: 740, imageSeed: "lineart" },
   { id: "coffee-beans", title: "Single-origin coffee beans", description: "Medium roast, notes of cocoa and citrus.", price: 16, category: "Food", seller: "Daybreak Roasters", height: 560, imageSeed: "coffee" },
   { id: "hammock", title: "Camping hammock", description: "Parachute nylon with tree straps, 300kg rated.", price: 42, category: "Outdoors", seller: "Trail Goods", height: 680, imageSeed: "hammock" },
-  { id: "saddle-top-handle-bag", title: "Saddle Top-Handle Bag", description: "Curved saddle shape with a gold clasp. Comes in red or black.", price: 66, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/saddle-top-handle-bag.jpg", width: 1080, height: 1080 },
+  { id: "saddle-top-handle-bag", title: "Saddle Top-Handle Bag", description: "Curved saddle shape with a gold clasp. Comes in red or black.", price: 66, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/saddle-top-handle-bag.jpg", width: 1080, height: 1080, colors: [{ name: "Red", hex: "#9b1c1c" }, { name: "Black", hex: "#171717" }] },
   { id: "silk-scarf", title: "Printed silk scarf", description: "Pure silk twill with hand-rolled edges.", price: 58, category: "Fashion", seller: "Weave Story", height: 760, imageSeed: "scarf" },
   { id: "candle-set", title: "Soy candle trio", description: "Cedar, fig and amber. 40-hour burn each.", price: 30, category: "Home", seller: "Clay & Co", height: 540, imageSeed: "candles" },
   { id: "lip-tint", title: "Hibiscus lip tint", description: "Buildable sheer colour, plant-based.", price: 12, category: "Beauty", seller: "Glow Naturals", height: 820, imageSeed: "lips" },
-  { id: "classic-flap-mini-bag", title: "Classic Flap Mini Bag", description: "Pebbled leather mini bag with a top handle. Comes in tan, black or burgundy.", price: 62, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/classic-flap-mini-bag.jpg", width: 1024, height: 1024 },
+  { id: "classic-flap-mini-bag", title: "Classic Flap Mini Bag", description: "Pebbled leather mini bag with a top handle. Comes in tan, black or burgundy.", price: 62, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/classic-flap-mini-bag.jpg", width: 1024, height: 1024, colors: [{ name: "Tan", hex: "#c8956a" }, { name: "Black", hex: "#171717" }, { name: "Burgundy", hex: "#5c1a1f" }] },
   { id: "honey-jar", title: "Raw forest honey", description: "Unfiltered honey from local beekeepers.", price: 14, category: "Food", seller: "Pepper Pot", height: 700, imageSeed: "honey" },
   { id: "pottery-print", title: "Market day photo print", description: "Signed photographic print, 40×50cm.", price: 60, category: "Art", seller: "Retro Lens", height: 900, imageSeed: "market" },
   { id: "water-bottle", title: "Insulated water bottle", description: "Keeps cold 24h, hot 12h. 750ml.", price: 25, category: "Outdoors", seller: "Trail Goods", height: 600, imageSeed: "bottle" },
-  { id: "dome-bowling-bag", title: "Dome Bowling Bag", description: "Smooth leather bowling bag with a zip top and rolled handles. Comes in black, ivory or chestnut.", price: 95, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/dome-bowling-bag.jpg", width: 1199, height: 1799 },
+  { id: "dome-bowling-bag", title: "Dome Bowling Bag", description: "Smooth leather bowling bag with a zip top and rolled handles. Comes in black, ivory or chestnut.", price: 95, category: "Fashion", seller: "Goba Collections", image: "/products/goba-collections/dome-bowling-bag.jpg", width: 1199, height: 1799, colors: [{ name: "Black", hex: "#171717" }, { name: "Ivory", hex: "#efe9dc" }, { name: "Chestnut", hex: "#5a2e22" }] },
   { id: "smart-lamp", title: "Smart desk lamp", description: "Adjustable warmth, USB-C charging base.", price: 64, category: "Tech", seller: "Volt Shop", height: 760, imageSeed: "desklamp" },
 ];
 

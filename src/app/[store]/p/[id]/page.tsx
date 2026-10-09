@@ -30,7 +30,7 @@ export default async function StoreProductPage({ params }: Props) {
 
   return (
     <>
-      <ProductDetail product={product} />
+      <ProductDetail product={product} productPath={`/${store.slug}/p/${product.id}`} />
       {more.length > 0 && (
         <>
           <h2 className="mb-6 text-center text-xl font-semibold">More from {store.name}</h2>

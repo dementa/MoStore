@@ -3,13 +3,17 @@ import Link from "next/link";
 import { formatPrice, type Product } from "@/lib/products";
 import { getStoreByName } from "@/lib/stores";
 import { ProductActions } from "./ProductActions";
+import { ShareButton } from "./ShareButton";
 import { StoreLogo } from "./StoreLogo";
 
 export function ProductDetail({
   product,
   categoryHref,
+  productPath,
 }: {
   product: Product;
+  /** This page's path, for sharing. */
+  productPath: string;
   /** Omit inside a store, where there's no category feed to go back to. */
   categoryHref?: string;
 }) {
@@ -27,19 +31,22 @@ export function ProductDetail({
         className="h-auto w-full"
       />
       <div className="flex flex-col gap-6 p-8">
-        <ProductActions id={product.id} />
         <div>
-          {categoryHref ? (
-            <Link href={categoryHref} className="text-sm text-zinc-600 underline-offset-2 hover:underline">
-              {product.category}
-            </Link>
-          ) : (
-            <p className="text-sm text-zinc-600">{product.category}</p>
-          )}
+          <div className="flex items-center justify-between gap-4">
+            {categoryHref ? (
+              <Link href={categoryHref} className="text-sm text-zinc-600 underline-offset-2 hover:underline">
+                {product.category}
+              </Link>
+            ) : (
+              <p className="text-sm text-zinc-600">{product.category}</p>
+            )}
+            <ShareButton title={product.title} path={productPath} />
+          </div>
           <h1 className="mt-1 text-3xl font-semibold">{product.title}</h1>
           <p className="mt-3 text-2xl font-semibold">{formatPrice(product.price)}</p>
           <p className="mt-4 text-zinc-700">{product.description}</p>
         </div>
+        <ProductActions id={product.id} colors={product.colors} />
         {store && (
           <Link href={`/${store.slug}`} className="group mt-auto flex items-center gap-3">
             <StoreLogo store={store} size={48} />

@@ -36,8 +36,8 @@ export function CartView({ store }: { store?: Store }) {
       <section>
         <h1 className="mb-6 text-3xl font-semibold">Cart</h1>
         <ul className="flex flex-col gap-4">
-          {lines.map(({ id, qty, product }) => (
-            <li key={id} className="flex gap-4">
+          {lines.map(({ id, qty, color, product }) => (
+            <li key={`${id}:${color ?? ""}`} className="flex gap-4">
               <Link href={productHref(id)} className="shrink-0">
                 <Image
                   src={product.image}
@@ -52,9 +52,18 @@ export function CartView({ store }: { store?: Store }) {
                   {product.title}
                 </Link>
                 <p className="text-sm text-zinc-600">{product.seller}</p>
+                {color && (
+                  <p className="mt-0.5 flex items-center gap-1.5 text-sm text-zinc-600">
+                    <span
+                      className="h-3.5 w-3.5 rounded-full ring-1 ring-black/10"
+                      style={{ background: product.colors?.find((c) => c.name === color)?.hex }}
+                    />
+                    {color}
+                  </p>
+                )}
                 <div className="mt-auto flex items-center gap-2">
                   <button
-                    onClick={() => setQty(id, qty - 1)}
+                    onClick={() => setQty(id, qty - 1, color)}
                     aria-label="Decrease quantity"
                     className="grid h-8 w-8 place-items-center rounded-full bg-zinc-100 hover:bg-zinc-200"
                   >
@@ -62,7 +71,7 @@ export function CartView({ store }: { store?: Store }) {
                   </button>
                   <span className="w-6 text-center text-sm font-semibold">{qty}</span>
                   <button
-                    onClick={() => setQty(id, qty + 1)}
+                    onClick={() => setQty(id, qty + 1, color)}
                     aria-label="Increase quantity"
                     className="grid h-8 w-8 place-items-center rounded-full bg-zinc-100 hover:bg-zinc-200"
                   >
