@@ -27,7 +27,7 @@ export const stores: Store[] = [
 ];
 
 // Paths that belong to MoStore itself and can never be a store slug.
-export const RESERVED_SLUGS = ["api", "cart", "saved", "search", "product", "icons", "sw.js", "manifest.webmanifest"];
+export const RESERVED_SLUGS = ["api", "cart", "saved", "search", "sell", "product", "icons", "sw.js", "manifest.webmanifest"];
 
 export function getStore(slug: string) {
   return stores.find((s) => s.slug === slug);

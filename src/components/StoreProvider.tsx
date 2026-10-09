@@ -12,6 +12,10 @@ type StoreState = {
   cart: CartLine[];
   toggleSave: (id: string) => void;
   isSaved: (id: string) => boolean;
+  /** Store slugs the customer follows. */
+  following: string[];
+  toggleFollow: (slug: string) => void;
+  isFollowing: (slug: string) => boolean;
   addToCart: (id: string, color?: string) => void;
   setQty: (id: string, qty: number, color?: string) => void;
   qtyInCart: (id: string, color?: string) => number;
@@ -24,6 +28,7 @@ const STORAGE_KEY = "mostore:v1";
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [saved, setSaved] = useState<string[]>([]);
   const [cart, setCart] = useState<CartLine[]>([]);
+  const [following, setFollowing] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -33,6 +38,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         const data = JSON.parse(raw);
         setSaved(data.saved ?? []);
         setCart(data.cart ?? []);
+        setFollowing(data.following ?? []);
       }
     } catch {}
     setLoaded(true);
@@ -41,9 +47,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!loaded) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ saved, cart }));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ saved, cart, following }));
     } catch {}
-  }, [saved, cart, loaded]);
+  }, [saved, cart, following, loaded]);
 
   const value: StoreState = {
     saved,
@@ -51,6 +57,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     toggleSave: (id) =>
       setSaved((s) => (s.includes(id) ? s.filter((x) => x !== id) : [id, ...s])),
     isSaved: (id) => saved.includes(id),
+    following,
+    toggleFollow: (slug) =>
+      setFollowing((f) => (f.includes(slug) ? f.filter((x) => x !== slug) : [slug, ...f])),
+    isFollowing: (slug) => following.includes(slug),
     addToCart: (id, color) =>
       setCart((c) => {
         const line = c.find((l) => isLine(l, id, color));

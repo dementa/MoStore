@@ -1,23 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { shareLink } from "@/lib/share";
 
 export function ShareButton({ title, path }: { title: string; path: string }) {
   const [copied, setCopied] = useState(false);
 
   async function share() {
-    const url = new URL(path, window.location.origin).href;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-      } catch {}
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(url);
+    if ((await shareLink({ title, path })) === "copied") {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+    }
   }
 
   return (

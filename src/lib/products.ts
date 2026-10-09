@@ -99,7 +99,12 @@ export function filterProducts(query?: string, category?: string) {
 export function formatPrice(n: number) {
   // Formatted by hand so server and every browser print the same thing
   // (browsers disagree on "UGX" vs "USh").
-  return `UGX ${Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  return `UGX ${formatAmount(n)}`;
+}
+
+/** The number part of a price, e.g. "250,000". */
+export function formatAmount(n: number) {
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 // Shown under "Popular on MoStore" on the search screen. Replace with real

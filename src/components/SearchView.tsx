@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { categories, filterProducts, popularSearches, products, type Product } from "@/lib/products";
 import { getStoreProducts, stores, type Store } from "@/lib/stores";
 import { MasonryGrid } from "./MasonryGrid";
+import { ShopCard } from "./ShopCard";
 
 function Tile({ image, label, href, onClick }: { image: string; label: string; href?: string; onClick?: () => void }) {
   const inner = (
@@ -61,7 +62,6 @@ export function SearchView({ store }: { store?: Store }) {
 
   const base = store ? `/${store.slug}` : "/";
   const shopCategories = categories.filter((c) => scope.some((p) => p.category === c));
-  const shopImage = (s: Store) => getStoreProducts(s)[0]?.image;
 
   return (
     <div className="mx-auto max-w-5xl">
@@ -165,12 +165,14 @@ export function SearchView({ store }: { store?: Store }) {
                   return image ? <Tile key={term} image={image} label={term} onClick={() => setQuery(term)} /> : null;
                 })}
               </Section>
-              <Section title="Shops on MoStore">
-                {stores.map((s) => {
-                  const image = shopImage(s);
-                  return image ? <Tile key={s.slug} image={image} label={s.name} href={`/${s.slug}`} /> : null;
-                })}
-              </Section>
+              <section className="mt-8">
+                <h2 className="mb-3 text-center text-lg font-semibold">Shops on MoStore</h2>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {stores.map((s) => (
+                    <ShopCard key={s.slug} store={s} />
+                  ))}
+                </div>
+              </section>
             </>
           )}
         </>
